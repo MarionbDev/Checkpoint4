@@ -13,18 +13,24 @@ const app = express();
 
 app.use(express.json());
 
+// Permet l'accès au cookie et les lire
+const cookieParser = require("cookie-parser");
+
+app.use(cookieParser());
+
 const cors = require("cors");
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
+    origin: process.env.FRONTEND_URL ?? "http://localhost:5173",
     optionsSuccessStatus: 200,
+    credentials: true, // cookie
   })
 );
 
 // import and mount the API routes
 
-const router = require("./router");
+const router = require("./routes");
 
 app.use("/api", router);
 

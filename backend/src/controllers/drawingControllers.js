@@ -1,7 +1,7 @@
 const models = require("../models");
 
 const browse = (req, res) => {
-  models.item
+  models.drawing
     .findAll()
     .then(([rows]) => {
       res.send(rows);
@@ -13,7 +13,7 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
-  models.item
+  models.drawing
     .find(req.params.id)
     .then(([rows]) => {
       if (rows[0] == null) {
@@ -29,14 +29,14 @@ const read = (req, res) => {
 };
 
 const edit = (req, res) => {
-  const item = req.body;
+  const drawing = req.body;
 
   // TODO validations (length, format...)
 
-  item.id = parseInt(req.params.id, 10);
+  drawing.id = parseInt(req.params.id, 10);
 
-  models.item
-    .update(item)
+  models.drawing
+    .update(drawing)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
@@ -51,14 +51,14 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-  const item = req.body;
+  const drawing = req.body;
 
   // TODO validations (length, format...)
 
-  models.item
-    .insert(item)
+  models.drawing
+    .insert(drawing)
     .then(([result]) => {
-      res.location(`/items/${result.insertId}`).sendStatus(201);
+      res.status(201).json(result);
     })
     .catch((err) => {
       console.error(err);
@@ -67,7 +67,7 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
-  models.item
+  models.drawing
     .delete(req.params.id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
@@ -82,10 +82,28 @@ const destroy = (req, res) => {
     });
 };
 
+const allCreation = (req, res) => {
+  const idUser = req.params.id;
+  models.drawing
+    .findAllCreation(parseInt(idUser, 10))
+    .then(([rows]) => {
+      if (rows.length === 0) {
+        res.sendStatus(404);
+      } else {
+        res.send(rows);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 module.exports = {
   browse,
   read,
   edit,
   add,
   destroy,
+  allCreation,
 };
