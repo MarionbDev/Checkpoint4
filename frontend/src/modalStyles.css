@@ -1,0 +1,17 @@
+.customOverlay {
+  background: rgba(28, 29, 29, 0.7);
+}
+
+.customModal {
+  background-color: rgb(85, 93, 113);
+  width: 420px;
+  height: 120px;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .customModal {
+    width: 280px;
+    height: 100px;
+  }
+}
