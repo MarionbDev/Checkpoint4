@@ -1,21 +1,20 @@
 import { Routes, Route } from "react-router-dom";
 import PrivateRoutes from "./components/PrivateRoutes";
-import SignUp from "./pages/SignUp";
-import Gallery from "./pages/Gallery";
 import "./App.css";
-
 import "react-responsive-modal/styles.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./modalStyles.css";
+
+import SignUp from "./pages/SignUp";
+import Gallery from "./pages/Gallery";
 import MyProfile from "./pages/MyProfile";
 import Connection from "./pages/Connection";
 import Navbar from "./components/Navbar";
-import Contact from "./pages/Contact";
 import Logout from "./components/Logout";
 import EditMyProfile from "./pages/EditMyProfile";
 import ChangePassword from "./components/ChangePassword";
-import DrawingDetails from "./pages/DrawingDetails";
 import Admin from "./pages/Admin";
+import DrawingDetails from "./pages/DrawingDetails";
 
 function App() {
   return (
@@ -30,11 +29,11 @@ function App() {
           path="/"
           element={<PrivateRoutes authorizedRoles={["admin", "user"]} />}
         >
-          <Route path="edit-profile/:id" element={<EditMyProfile />} />
           <Route path="gallery" element={<Gallery />} />
+          <Route path="/gallery/:id" element={<DrawingDetails />} />
           <Route path="my-profile" element={<MyProfile />} />
+          <Route path="edit-profile/:id" element={<EditMyProfile />} />
           <Route path="change-password" element={<ChangePassword />} />
-          <Route path="drawings/:id" element={<DrawingDetails />} />
           <Route path="logout" element={<Logout />} />
         </Route>
 
@@ -44,8 +43,6 @@ function App() {
         >
           <Route index element={<Admin />} />
         </Route>
-
-        <Route path="/contact" element={<Contact />} />
       </Routes>
     </div>
   );

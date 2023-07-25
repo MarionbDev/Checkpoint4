@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
+
 // import MyCreation from "../components/MyCreation";
 
 export default function EditMyProfile() {
-  const [user, setUser] = useState([]);
+  const [userProf, setUserProf] = useState([]);
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
   const [pseudo, setPseudo] = useState("");
@@ -12,15 +13,18 @@ export default function EditMyProfile() {
   const [about, setAbout] = useState("");
   const [mail, setMail] = useState("");
 
-  const { idUser } = useUserContext();
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [{ user }, dispatch] = useUserContext();
 
   const getOneUser = () => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${idUser}`, {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
       credentials: "include",
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setUser(data);
+        // console.log("data users:", data);
+        setUserProf(data);
         setLastname(data.lastname);
         setFirstname(data.firstname);
         setPseudo(data.pseudo);
@@ -31,6 +35,17 @@ export default function EditMyProfile() {
       })
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    if (user) {
+      setLastname(user.lastname);
+      setFirstname(user.firstname);
+      setPseudo(user.pseudo);
+      setAvatar(user.avatar);
+      setAbout(user.about);
+      setMail(user.mail);
+    }
+  }, [user]);
 
   const handleHupdateUser = (e) => {
     e.preventDefault();
@@ -44,7 +59,7 @@ export default function EditMyProfile() {
       mail,
     };
 
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${idUser}`, {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -52,8 +67,11 @@ export default function EditMyProfile() {
       },
       body: JSON.stringify(updateUser),
     })
-      .then((res) => res.json())
-      // navigate("/edit-profile")
+      .then(() => {
+        // console.log("User updated successfully:", data);
+        dispatch({ type: "UPDATE_USER", payload: updateUser });
+        navigate("/my-profile");
+      })
       .catch((error) => {
         console.error("Error updating user:", error);
       });
@@ -61,9 +79,9 @@ export default function EditMyProfile() {
 
   useEffect(() => {
     getOneUser();
-  }, [idUser]);
+  }, [id]);
 
-  if (!user) {
+  if (!userProf) {
     return (
       <p className="text-white flex justify-center mt-96">
         Chargement du compte en cours...
@@ -73,86 +91,88 @@ export default function EditMyProfile() {
 
   return (
     <div className="">
-      <div className="flex justify-center pt-28 gap-2 text-lg">
-        <p className="italic">En cours de développement !!!</p>
+      <div className="flex justify-between border-b-2 border-[#282e4d] mx-10 pt-28">
+        <p className="text-3xl  ml-2 ">Mettre à jour mon profil</p>
       </div>
       <section>
-        <form>
-          <div>
-            <div>
-              <label htmlFor="firstname" className="">
-                Prénom :
-              </label>
-              <input
-                type="text"
-                id="firstname"
-                required
-                value={firstname}
-                onChange={(e) => setFirstname(e.target.value)}
-              />
+        <div className="  mt-20 mx-96 h-76 flex flex-col  p-5 rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] ">
+          <form>
+            <div className="flex flex-col gap-10">
+              <div className="flex justify-between">
+                <label htmlFor="firstname" className="">
+                  Prénom :
+                </label>
+                <input
+                  type="text"
+                  id="firstname"
+                  required
+                  value={firstname}
+                  onChange={(e) => setFirstname(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="lastname" className="">
+                  Nom :
+                </label>
+                <input
+                  type="text"
+                  id="lastname"
+                  required
+                  value={lastname}
+                  onChange={(e) => setLastname(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="pseudo" className="">
+                  Pseudo :
+                </label>
+                <input
+                  type="text"
+                  id="pseudo"
+                  required
+                  value={pseudo}
+                  onChange={(e) => setPseudo(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="mail" className="">
+                  Mail :
+                </label>
+                <input
+                  type="text"
+                  id="mail"
+                  required
+                  value={mail}
+                  onChange={(e) => setMail(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="avatar" className="">
+                  Avatar :
+                </label>
+                <input
+                  type="text"
+                  id="avatar"
+                  required
+                  value={avatar}
+                  onChange={(e) => setAvatar(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="about" className="">
+                  A propos :
+                </label>
+                <input
+                  type="text"
+                  id="about"
+                  required
+                  value={about}
+                  onChange={(e) => setAbout(e.target.value)}
+                />
+              </div>
             </div>
-            <div>
-              <label htmlFor="lastname" className="">
-                Nom :
-              </label>
-              <input
-                type="text"
-                id="lastname"
-                required
-                value={lastname}
-                onChange={(e) => setLastname(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="pseudo" className="">
-                Pseudo :
-              </label>
-              <input
-                type="text"
-                id="pseudo"
-                required
-                value={pseudo}
-                onChange={(e) => setPseudo(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="mail" className="">
-                Mail :
-              </label>
-              <input
-                type="text"
-                id="mail"
-                required
-                value={mail}
-                onChange={(e) => setMail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="avatar" className="">
-                Avatar :
-              </label>
-              <input
-                type="text"
-                id="avatar"
-                required
-                value={avatar}
-                onChange={(e) => setAvatar(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="about" className="">
-                A propos :
-              </label>
-              <input
-                type="text"
-                id="about"
-                required
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-              />
-            </div>
-          </div>
-          <Link to="/my-profile">
+
             <button
               className=" bg-slate-400"
               type="submit"
@@ -160,8 +180,8 @@ export default function EditMyProfile() {
             >
               Sauvegarder
             </button>
-          </Link>
-        </form>
+          </form>
+        </div>
       </section>
     </div>
   );

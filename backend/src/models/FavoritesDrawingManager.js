@@ -21,16 +21,28 @@ class FavoriteDrawingManager extends AbstractManager {
 
   findAll() {
     return this.database.query(
-      `SELECT favoriteDrawing.user_id AS userId, favoriteDrawing.drawing_id AS drawingId, user.firstname, user.lastname, drawing.image, drawing.title FROM ${this.table} AS favoriteDrawing JOIN drawing ON drawing.id = favoriteDrawing.drawing_id JOIN user ON user.id = favoriteDrawing.user_id `
+      `SELECT favoriteDrawing.id, favoriteDrawing.user_id AS userId, favoriteDrawing.drawing_id AS drawingId, user.firstname, user.lastname, drawing.image, drawing.title FROM ${this.table} AS favoriteDrawing JOIN drawing ON drawing.id = favoriteDrawing.drawing_id JOIN user ON user.id = favoriteDrawing.user_id `
     );
   }
 
-  findByUser(userId) {
+  findAllFavorites(idUser, idDrawing) {
     return this.database.query(
-      `SELECT favoriteDrawing.user_id AS userId, favoriteDrawing.drawing_id AS drawingId, drawing.image, drawing.title FROM ${this.table} AS favoriteDrawing JOIN drawing.id = favoriteDrawing.drawing_id JOIN user ON user.id = favoriteDrawing.user_id WHERE favoriteDrawing.user_id = ?`,
-      [userId]
+      `SELECT  favorite_drawing.id ,drawing.id, drawing.title, drawing.description, drawing.image, user.lastname, user.firstname
+      FROM ${this.table}
+      JOIN drawing ON drawing.id = favorite_drawing.drawing_id
+      JOIN user ON favorite_drawing.user_id = user.id
+      WHERE favorite_drawing.user_id = ?`,
+      [idUser, idDrawing]
     );
   }
+
+  // findAllFavoritesUser(idUser) {
+  //   console.log("ID utilisateur:", idUser);
+  //   return this.database.query(
+  //     `SELECT * FROM favorite_drawing WHERE user_id = ?`,
+  //     [idUser]
+  //   );
+  // }
 
   delete(userId, drawingId) {
     return this.database.query(

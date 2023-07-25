@@ -3,6 +3,7 @@ import { Modal } from "react-responsive-modal";
 import * as BsIcons from "react-icons/bs";
 import AdminCreateDrawing from "../components/AdminCreateDrawing";
 import GetAllUser from "../components/AllUser";
+// import Drawing from "../components/Drawing";
 
 export default function Admin() {
   const [drawList, setDrawList] = useState([]);
@@ -33,7 +34,6 @@ export default function Admin() {
   }, []);
 
   const deleteDrawing = () => {
-    // if (confirm("Voulez-vous supprimer cette intervention ?")) {
     fetch(
       `${import.meta.env.VITE_BACKEND_URL}/api/drawings/${selectedDrawingId}`,
       {
@@ -43,10 +43,10 @@ export default function Admin() {
     )
       .then(() => {
         getDrawings();
+        setDrawList();
         deleteOnCloseModal();
       })
       .catch((err) => console.error(err));
-    // }
   };
 
   if (drawList.length === 0) {
@@ -86,16 +86,19 @@ export default function Admin() {
         <div className="px-8  flex items-center parent ">
           {drawList.map((item) => (
             <div
-              key={item.id}
+              key={`details-${item.id}`}
               className="bg-[#e2e4eb] hover:bg-[#6f77a2] shadow-xl shadow-[#7f88ad] rounded-md p-2  hover:text-white"
             >
-              <div className="p-2 portrait-item bg-black ">
-                <img
-                  src={`${
-                    import.meta.env.VITE_BACKEND_URL
-                  }/public/assets/drawings/${item.image}`}
-                  alt="Drawing"
-                />
+              <div className="flex flex-col ">
+                <div className="flex justify-center items-center p-2 portrait-item bg-black  ">
+                  <img
+                    src={`${
+                      import.meta.env.VITE_BACKEND_URL
+                    }/public/assets/drawings/${item.image}`}
+                    alt="Drawing"
+                    className=" h-[19rem] object-cover  "
+                  />
+                </div>
               </div>
               <div className="flex justify-between">
                 <div className="flex justify-center mt-1">

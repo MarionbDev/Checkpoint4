@@ -3,10 +3,17 @@ const router = require("express").Router();
 const userControllers = require("../controllers/userControllers");
 const drawingControllers = require("../controllers/drawingControllers");
 const authControllers = require("../controllers/authControllers");
+const favoriteDrawingsControllers = require("../controllers/favoriteDrawingControllers");
 
 router.get("/", userControllers.browse);
 router.get("/:id", userControllers.read);
 router.get("/:id/drawings", drawingControllers.allCreation);
+router.get(
+  "/:id/favoriteDrawings",
+  authControllers.verifyToken,
+  favoriteDrawingsControllers.findAllFavoritesByUser
+);
+
 router.put("/:id", userControllers.edit);
 router.post(
   "/",
@@ -22,6 +29,12 @@ router.delete(
   authControllers.verifyToken,
   authControllers.isAdmin,
   userControllers.destroy
+);
+
+router.delete(
+  "/:id/favoriteDrawings/:drawingId",
+  authControllers.verifyToken,
+  favoriteDrawingsControllers.destroy
 );
 
 module.exports = router;

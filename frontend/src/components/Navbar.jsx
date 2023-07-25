@@ -7,6 +7,7 @@ import * as MdIcons from "react-icons/md";
 import PrivateLink from "./PrivateLink";
 import Logout from "./Logout";
 import Header from "./Header";
+import Contact from "../pages/Contact";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -18,7 +19,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="navbar text-white fixed w-full top-0  ">
+      <div className="navbar text-white fixed w-full z-50 top-0  ">
         <button type="button" className="menu-bars">
           <AiIcons.AiOutlineMenu onClick={showSidebar} />
         </button>
@@ -29,7 +30,7 @@ export default function Navbar() {
           <Header />
         </div>
       </div>
-      <div className="text-white  ">
+      <div className="text-white ">
         <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
           <button
             type="button"
@@ -81,14 +82,12 @@ export default function Navbar() {
                 <li className=" nav-text ">
                   <Link to="/signup">
                     <BsIcons.BsPersonPlusFill />
-                    <span className="ml-4">S'enregistrer</span>
+                    <span className="ml-4 ">S'enregistrer</span>
                   </Link>
                 </li>
-                <li className=" nav-text ">
-                  <Link to="/contact">
-                    <AiIcons.AiOutlineMessage />
-                    <span className="ml-4">Contact</span>
-                  </Link>
+
+                <li className="nav-text p-0 ">
+                  <Contact />
                 </li>
               </div>
               <div className="mt-44 ">

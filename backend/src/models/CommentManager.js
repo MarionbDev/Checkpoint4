@@ -7,8 +7,8 @@ class CommentManager extends AbstractManager {
 
   insert(comment) {
     return this.database.query(
-      `insert into ${this.table} (comment, date_time, drawing_id, user_id) values (?,?,?,?)`,
-      [comment.comment, comment.date_time, comment.drawing_id, comment.user_id]
+      `insert into ${this.table} (comment, drawing_id, user_id) values (?,?,?)`,
+      [comment.comment, comment.drawingId, comment.userId]
     );
   }
 
@@ -21,14 +21,20 @@ class CommentManager extends AbstractManager {
 
   find(id) {
     return this.database.query(
-      `select id, comment, date_time, drawing_id, user_id from  ${this.table} where id = ?`,
+      `select id, comment,  drawing_id, user_id from  ${this.table} where id = ?`,
       [id]
     );
   }
 
   findAll() {
     return this.database.query(
-      `select id, comment, date_time, drawing_id, user_id from  ${this.table}`
+      `select id, comment, drawing_id, user_id from  ${this.table}`
+    );
+  }
+
+  findAllByDrawing() {
+    return this.database.query(
+      `SELECT c.id, c.comment,  c.drawing_id, c.user_id FROM  ${this.table} JOIN drawing d ON c.drawing_id = d.id WHERE d.id = drawing_id; `
     );
   }
 }
