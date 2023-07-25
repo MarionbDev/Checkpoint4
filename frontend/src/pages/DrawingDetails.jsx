@@ -1,122 +1,183 @@
-// import { Tooltip } from "react-tooltip";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-// import { useUserContext } from "../contexts/UserContext";
+import * as BsIcons from "react-icons/bs";
+import { useUserContext } from "../contexts/UserContext";
 
 export default function DrawingDetails() {
   const [drawing, setDrawing] = useState();
+  const [newComment, setNewComment] = useState([]);
+  const [commentList, setCommentList] = useState([]);
+  const [userList, setUsersList] = useState([]);
+  const [selectedComment, setSelectedComment] = useState(null);
 
-  // const [{ user }] = useUserContext();
+  const [{ user }] = useUserContext();
   const { id } = useParams();
+  // console.log("Drawing ID:", id);
+
+  const getUsersList = () => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        // console.log("data users :", data);
+        setUsersList(data);
+      })
+      .catch((err) => console.error(err));
+  };
 
   const getOneDrawing = () => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/drawings/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
+        // console.log("data drawing:", data);
         setDrawing(data);
       })
       .catch((err) => console.error(err));
-    // .then((data) => setDrawing(data));
+  };
+
+  const getComment = () => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/comments/`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        // console.log("data comment :", data);
+        if (drawing.id) {
+          const filteredComments = data.filter(
+            (comment) => comment.drawing_id === drawing.id
+          );
+          setCommentList(filteredComments);
+        }
+      })
+
+      .catch((err) => console.error(err));
+  };
+
+  const handleChangeComment = (e) => {
+    setNewComment(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      comment: newComment,
+      userId: user.id,
+      drawingId: drawing.id,
+    };
+
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/comments/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        // remettre data () si ça coince
+        // console.log("Commentaire enregistré :", data);
+        setNewComment("");
+        getComment();
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const deleteComment = () => {
+    fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/comments/${selectedComment}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    )
+      .then(() => {
+        getComment();
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleDelete = (commentId) => {
+    setSelectedComment(commentId);
+    deleteComment();
   };
 
   useEffect(() => {
+    getUsersList();
     getOneDrawing();
-  }, [id]);
+  }, []);
+
+  useEffect(() => {
+    if (drawing && drawing.id) {
+      getComment();
+    }
+  }, [drawing]);
 
   if (!drawing) {
     return <p className="mt-36 flex justify-center text-md">Loading</p>;
   }
 
   return (
-    <div className="flex justify-center  ">
-      <div className="flex justify-center mt-20 w-[50%] h-96  border-2 border-black">
-        <div className="flex flex-col justify-between items-end">
-          <div className=" flex justify-center  bg-slate-400">
-            <div key={drawing.id} className="p-2 portrait-item bg-black">
-              <img
-                src={`${
-                  import.meta.env.VITE_BACKEND_URL
-                }/public/assets/drawings/${drawing.image}`}
-                alt="Drawing"
+    <div className="mt-24 mx-20">
+      <div className="md:grid md:grid-cols-2  ">
+        <div
+          key={`details-${drawing.id}`}
+          className="flex flex-col items-center my-5 "
+        >
+          <img
+            src={`${import.meta.env.VITE_BACKEND_URL}/public/assets/drawings/${
+              drawing.image
+            }`}
+            alt="Drawing"
+            className=" border-8 border-black  "
+          />
+          <div className=" flex flex-col mt-4 text-xl">
+            <p className="="> {drawing.title}</p>
+            <p className="="> {drawing.description}</p>
+          </div>
+        </div>
+        <div className="flex justify-center items-center">
+          <div className="flex flex-col w-6/12">
+            <p className="mb-2">Commentaires : </p>
+            <div className="flex flex-col justify-between border-2 border-black h-96 p-4 ">
+              <div className="flex flex-col ">
+                {commentList.map((item) => {
+                  const commentUser = userList.find(
+                    (userItem) => userItem.id === item.user_id
+                  );
+                  return (
+                    <div className="flex">
+                      <div className="flex  ">
+                        <p className="mr-2">{commentUser.pseudo} : </p>
+                        <p>{item.comment}</p>
+                        {user.role === "admin" && (
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            <p>
+                              <BsIcons.BsTrash />
+                            </p>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className=" flex justify-center items-center border-2 h-24">
+              <textarea
+                id="comment"
+                name="comment"
+                rows="3"
+                cols="55"
+                value={newComment}
+                onChange={handleChangeComment}
+                placeholder="Laisser un commentaire ! "
+                className=" p-2 italic "
               />
-              <p>{drawing.title}</p>
+              <button type="button" onClick={handleSubmit}>
+                Ok
+              </button>
             </div>
           </div>
-          {/* <div className="flex ">
-            <p className="h-20 w-20 bg-orange-300"> {drawing.title} </p>
-            <p className="h-20 w-20 bg-red-300"> {drawing.description} </p>
-          </div> */}
-        </div>
-        <div>
-          {/* <div>
-            {drawing.title}
-            {user &&
-              (!isFavorite ? (
-                <button
-                  className=" bg-cyan-400"
-                  onClick={addToFavorites}
-                  type="button"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      addToFavorites();
-                    }
-                  }}
-                  aria-label="Add to favorites"
-                >
-                  <div
-                    id="favorite"
-                    onClick={handleClickFavorite}
-                    onKeyUp={(e) => {
-                      if (e.key === "Enter") {
-                        handleClickFavorite();
-                      }
-                    }}
-                    className={isOnFavorite ? "isFavorite" : "notFavorite"}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={
-                      isOnFavorite
-                        ? "Remove from favorites"
-                        : "Add to favorites"
-                    }
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content="Ajouter l'oeuvre aux favoris"
-                  />
-                </button>
-              ) : (
-                <button
-                  className=" bg-cyan-700"
-                  type="button"
-                  onClick={removeToFavorite}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      removeToFavorite();
-                    }
-                  }}
-                  aria-label="Remove from favorites"
-                >
-                  <div
-                    id="favorite"
-                    onClick={handleClickFavorite}
-                    onKeyUp={(e) => {
-                      if (e.key === "Enter") {
-                        handleClickFavorite();
-                      }
-                    }}
-                    className={isOnFavorite ? "notFavorite" : "isFavorite"}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={
-                      isOnFavorite
-                        ? "Add to favorites"
-                        : "Remove from favorites"
-                    }
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content="Retirer l'oeuvre des favoris"
-                  />
-                </button>
-              ))}
-          </div> */}
         </div>
       </div>
     </div>

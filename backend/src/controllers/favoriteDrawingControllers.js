@@ -14,7 +14,7 @@ const browse = (req, res) => {
 
 const read = (req, res) => {
   models.favoriteDrawing
-    .find(req.params.id)
+    .find(req.params.id, req.params.drawingId)
     .then(([rows]) => {
       if (rows[0] == null) {
         res.sendStatus(404);
@@ -28,8 +28,30 @@ const read = (req, res) => {
     });
 };
 
+// Voir pour récup tous les favorites :
+const findAllFavoritesByUser = (req, res) => {
+  const userId = req.params.id;
+  // console.log("User ID:", userId);
+
+  models.favoriteDrawing
+    .findAllFavorites(userId)
+    .then(([rows]) => {
+      // console.log("Rows:", rows);
+      if (rows[0] == null) {
+        res.sendStatus(404);
+      } else {
+        res.status(req.method === "POST" ? 201 : 200).send(rows);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 const edit = (req, res) => {
   const favoriteDrawing = req.body;
+  // console.log(req.body);
 
   // TODO validations (length, format...)
 
@@ -50,16 +72,23 @@ const edit = (req, res) => {
     });
 };
 
-const add = (req, res, next) => {
+const add = (req, res) => {
   const favoriteDrawing = req.body;
+  // console.log(req.body);
 
   // TODO validations (length, format...)
 
   models.favoriteDrawing
     .insert(favoriteDrawing)
     .then(([result]) => {
-      req.params.id = result.insertId;
-      next();
+      // console.log("Insert result:", result);
+      if (result.affectedRows === 1) {
+        res.json({ success: true, message: "Like successfully recorded!" });
+      } else {
+        res
+          .status(500)
+          .json({ success: false, message: "Failed to record the like." });
+      }
     })
     .catch((err) => {
       console.error(err);
@@ -69,12 +98,32 @@ const add = (req, res, next) => {
 
 const destroy = (req, res) => {
   models.favoriteDrawing
-    .delete(req.params.id)
+    .delete(req.params.id, req.params.drawingId)
     .then(([result]) => {
+      // console.log("Insert result:", result);
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+const findAllFavoritesByDrawing = (req, res) => {
+  const { idUser } = req.params;
+
+  models.favoriteDrawing
+    .findAllFavorites(idUser)
+    .then(([rows]) => {
+      // console.log("Find all Fav result:", rows);
+      if (rows.length === 0) {
+        res.sendStatus(404);
+      } else {
+        res.json(rows);
       }
     })
     .catch((err) => {
@@ -89,4 +138,6 @@ module.exports = {
   edit,
   add,
   destroy,
+  findAllFavoritesByDrawing,
+  findAllFavoritesByUser,
 };

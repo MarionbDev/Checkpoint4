@@ -38,8 +38,8 @@ models.user = new UserManager();
 models.user.setDatabase(pool);
 models.drawing = new DrawingManager();
 models.drawing.setDatabase(pool);
-models.Comment = new CommentManager();
-models.Comment.setDatabase(pool);
+models.comment = new CommentManager();
+models.comment.setDatabase(pool);
 models.favoriteDrawing = new FavoriteDrawingManager();
 models.favoriteDrawing.setDatabase(pool);
 

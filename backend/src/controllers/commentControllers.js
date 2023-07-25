@@ -58,7 +58,14 @@ const add = (req, res) => {
   models.comment
     .insert(comment)
     .then(([result]) => {
-      res.status(201).json(result);
+      // console.log("Insert result:", result);
+      if (result.affectedRows === 1) {
+        res.json({ success: true, message: "Like successfully recorded!" });
+      } else {
+        res
+          .status(500)
+          .json({ success: false, message: "Failed to record the like." });
+      }
     })
     .catch((err) => {
       console.error(err);
@@ -99,6 +106,23 @@ const allCreation = (req, res) => {
     });
 };
 
+const allCommentByDrawing = (req, res) => {
+  models.comment
+    .findAllComment(req.params.id)
+    .then(([rows]) => {
+      // console.log("Find all Fav result:", rows);
+      if (rows[0] == null) {
+        res.sendStatus(404);
+      } else {
+        res.send(rows[0]);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 module.exports = {
   browse,
   read,
@@ -106,4 +130,5 @@ module.exports = {
   add,
   destroy,
   allCreation,
+  allCommentByDrawing,
 };
