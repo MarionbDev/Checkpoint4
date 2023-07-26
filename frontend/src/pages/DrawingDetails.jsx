@@ -12,13 +12,11 @@ export default function DrawingDetails() {
 
   const [{ user }] = useUserContext();
   const { id } = useParams();
-  // console.log("Drawing ID:", id);
 
   const getUsersList = () => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/`)
       .then((resp) => resp.json())
       .then((data) => {
-        // console.log("data users :", data);
         setUsersList(data);
       })
       .catch((err) => console.error(err));
@@ -28,7 +26,6 @@ export default function DrawingDetails() {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/drawings/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
-        // console.log("data drawing:", data);
         setDrawing(data);
       })
       .catch((err) => console.error(err));
@@ -38,7 +35,6 @@ export default function DrawingDetails() {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/comments/`)
       .then((resp) => resp.json())
       .then((data) => {
-        // console.log("data comment :", data);
         if (drawing.id) {
           const filteredComments = data.filter(
             (comment) => comment.drawing_id === drawing.id
@@ -71,8 +67,6 @@ export default function DrawingDetails() {
     })
       .then((res) => res.json())
       .then(() => {
-        // remettre data () si ça coince
-        // console.log("Commentaire enregistré :", data);
         setNewComment("");
         getComment();
       })
@@ -80,6 +74,7 @@ export default function DrawingDetails() {
   };
 
   const deleteComment = () => {
+    // console.log("delete comment ID:", selectedComment);
     fetch(
       `${import.meta.env.VITE_BACKEND_URL}/api/comments/${selectedComment}`,
       {
@@ -94,7 +89,9 @@ export default function DrawingDetails() {
   };
 
   const handleDelete = (commentId) => {
+    // console.log("handle ID:", commentId);
     setSelectedComment(commentId);
+    // console.log("setSelected id :", commentId);
     deleteComment();
   };
 

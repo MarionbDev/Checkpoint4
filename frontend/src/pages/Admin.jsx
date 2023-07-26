@@ -42,8 +42,9 @@ export default function Admin() {
       }
     )
       .then(() => {
-        getDrawings();
-        setDrawList();
+        setDrawList((prevDrawList) =>
+          prevDrawList.filter((item) => item.id !== selectedDrawingId)
+        );
         deleteOnCloseModal();
       })
       .catch((err) => console.error(err));
