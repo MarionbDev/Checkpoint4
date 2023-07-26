@@ -36,6 +36,17 @@ class FavoriteDrawingManager extends AbstractManager {
     );
   }
 
+  findFavorite(id) {
+    return this.database.query(
+      `SELECT  favorite_drawing.id ,drawing.id, drawing.title, drawing.description, drawing.image, user.lastname, user.firstname
+      FROM ${this.table}
+      JOIN drawing ON drawing.id = favorite_drawing.drawing_id
+      JOIN user ON favorite_drawing.user_id = user.id
+      WHERE favorite_drawing.user_id = ?`,
+      [id]
+    );
+  }
+
   // findAllFavoritesUser(idUser) {
   //   console.log("ID utilisateur:", idUser);
   //   return this.database.query(

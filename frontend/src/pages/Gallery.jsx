@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
-import heart from "../assets/coeur.png";
 import { useUserContext } from "../contexts/UserContext";
 
 export default function Gallery() {
   const [drawList, setDrawList] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [getFavoritesUser, setGetFavoritesUser] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-
-  // eslint-disable-next-line no-unused-vars
-  const [favoritesLoaded, setFavoritesLoaded] = useState(false);
 
   const [{ user }] = useUserContext();
 
@@ -25,105 +18,10 @@ export default function Gallery() {
       .catch((error) => console.error(error));
   };
 
-  const getFavorites = () => {
-    // if (user && user.id) {
-    // console.log("Calling getFavorites...");
-    fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/users/${
-        user.id
-      }/favoriteDrawings`,
-      {
-        headers: {
-          // Authorization: `Bearer ${user.token}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    )
-      .then((resp) => resp.json())
-      .then((data) => {
-        // console.log("favorite :", data);
-        setGetFavoritesUser(data);
-        setFavoritesLoaded(true);
-      })
-      .catch((err) => {
-        console.error("Error fetching favorites:", err);
-      });
-  };
-
   useEffect(() => {
     getDrawings();
-    if (user && user.id) {
-      getFavorites();
-    }
   }, [user]);
 
-  const handleClick = (drawingId) => {
-    if (!user || !user.id) {
-      return;
-    }
-    const isFavorite = favorites[drawingId];
-
-    if (isFavorite) {
-      // Copie l'objet des favoris sans l'élément à supprimer
-      const updatedFavorites = { ...favorites };
-      delete updatedFavorites[drawingId];
-      setFavorites(updatedFavorites);
-
-      fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/${
-          user.id
-        }/favoriteDrawings/${drawingId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((resp) => resp.json())
-        .then(() => {
-          // console.log("Favorite removed on the server:", data);
-        })
-        .catch((err) => console.error(err));
-
-      setDrawList((prevDrawList) =>
-        prevDrawList.map((item) =>
-          item.id === drawingId
-            ? { ...item, count_likes: item.count_likes - 1 }
-            : item
-        )
-      );
-    } else {
-      const newFavorite = { drawingId, userId: user.id };
-      setFavorites((prevFavorites) => ({
-        ...prevFavorites,
-        [drawingId]: newFavorite,
-      }));
-
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/favoriteDrawings/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(newFavorite),
-      })
-        .then((resp) => resp.json())
-        .then(() => {
-          // console.log("Favorite added on the server:", data);
-          setDrawList((prevDrawList) =>
-            prevDrawList.map((item) =>
-              item.id === drawingId
-                ? { ...item, count_likes: item.count_likes + 1 }
-                : item
-            )
-          );
-        })
-        .catch((err) => console.error(err));
-    }
-  };
   if (drawList.length === 0) {
     return (
       <p className="text-slate-500 flex justify-center mt-56">
@@ -148,9 +46,9 @@ export default function Gallery() {
               <Link to={`/gallery/${item.id}`}>
                 <div className="flex justify-center items-center py-2 mx-2 portrait-item  ">
                   <img
-                    src={`${
-                      import.meta.env.VITE_BACKEND_URL
-                    }/public/assets/drawings/${item.image}`}
+                    src={`${import.meta.env.VITE_ASSETS_URL}/drawings/${
+                      item.image
+                    }`}
                     alt="Drawing"
                     className=" h-[19rem] object-cover border-4 border-black  "
                   />
@@ -159,16 +57,6 @@ export default function Gallery() {
             </div>
             <div className="border-t-[#c6cad7] border-2 flex justify-between items-center ">
               <p className="truncate">{item.title}</p>
-              <div className="flex flex-col my-auto items-center ">
-                <button type="button" onClick={() => handleClick(item.id)}>
-                  <img
-                    src={heart}
-                    alt="heart logo"
-                    className=" w-8 h-8 opacity-60 mx-auto hover:scale-125  p-1"
-                  />
-                </button>
-                <p>count</p>
-              </div>
             </div>
           </div>
         ))}
