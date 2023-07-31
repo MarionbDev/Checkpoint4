@@ -24,4 +24,16 @@ const uploadDrawingImage = (req, res, next) => {
   });
 };
 
+// const uploadAvatar = (req, res, next) => {
+//   upload.single("avatarImage")(req, res, (err) => {
+//     if (err) {
+//       console.error(err);
+//       res.sendStatus(500);
+//     } else {
+//       req.body.image = req.file.filename;
+//       next();
+//     }
+//   });
+// };
+
 module.exports = { uploadDrawingImage };

@@ -1,14 +1,31 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { Modal } from "react-responsive-modal";
 import * as BsIcons from "react-icons/bs";
 import { useUserContext } from "../contexts/UserContext";
 
 export default function DrawingDetails() {
+  const navigate = useNavigate();
   const [drawing, setDrawing] = useState();
   const [newComment, setNewComment] = useState([]);
   const [commentList, setCommentList] = useState([]);
   const [userList, setUsersList] = useState([]);
   const [selectedComment, setSelectedComment] = useState(null);
+
+  const [selectedDrawingId, setSelectedDrawingId] = useState(null);
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const deleteOnCloseModal = () => setDeleteOpen(false);
+
+  const handleNonDeleteButtonClick = () => {
+    deleteOnCloseModal();
+  };
+
+  const handleDeleteOpenModal = (userId) => {
+    setSelectedDrawingId(userId);
+    setDeleteOpen(true);
+  };
 
   const [{ user }] = useUserContext();
   const { id } = useParams();
@@ -74,7 +91,6 @@ export default function DrawingDetails() {
   };
 
   const deleteComment = () => {
-    // console.log("delete comment ID:", selectedComment);
     fetch(
       `${import.meta.env.VITE_BACKEND_URL}/api/comments/${selectedComment}`,
       {
@@ -89,16 +105,35 @@ export default function DrawingDetails() {
   };
 
   const handleDelete = (commentId) => {
-    // console.log("handle ID:", commentId);
     setSelectedComment(commentId);
-    // console.log("setSelected id :", commentId);
-    deleteComment();
+  };
+
+  const deleteDrawing = () => {
+    fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/drawings/${selectedDrawingId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    )
+      .then(() => {
+        deleteOnCloseModal();
+        navigate("/gallery");
+      })
+
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
     getUsersList();
     getOneDrawing();
   }, []);
+
+  useEffect(() => {
+    if (selectedComment !== null) {
+      deleteComment();
+    }
+  }, [selectedComment]);
 
   useEffect(() => {
     if (drawing && drawing.id) {
@@ -127,6 +162,19 @@ export default function DrawingDetails() {
           <div className=" flex flex-col mt-4 text-xl">
             <p className="="> {drawing.title}</p>
             <p className="="> {drawing.description}</p>
+          </div>
+          <div className="flex justify-between">
+            {user.role === "admin" && (
+              <button
+                type="button"
+                onClick={() => handleDeleteOpenModal(drawing.id)}
+                className="mr-1 mt-1 hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] rounded-full p-2"
+              >
+                <p>
+                  <BsIcons.BsTrash />
+                </p>
+              </button>
+            )}
           </div>
         </div>
         <div className="flex justify-center items-center">
@@ -177,6 +225,45 @@ export default function DrawingDetails() {
           </div>
         </div>
       </div>
+      <Modal
+        open={deleteOpen}
+        onClose={deleteOnCloseModal}
+        center
+        classNames={{ overlay: "customOverlay", modal: "customModal" }}
+        closeIcon={
+          <span
+            style={{
+              fontSize: "20px",
+              width: "18px",
+              height: "18px",
+              color: "white",
+            }}
+          >
+            X
+          </span>
+        }
+      >
+        <h1 className="text-[#FFFFFF] text-center">
+          Souhaitez-vous supprimer ce dessin ?
+        </h1>
+        <div className="flex justify-center mt-2 gap-6 ">
+          <button
+            type="button"
+            onClick={deleteDrawing}
+            className="text-[#FFFFFF] bg-[#46526c] sm:rounded-full sm:mt-3 sm:w-20 sm:hover:bg-white/30  sm:hover:font-semibold"
+          >
+            Oui
+          </button>
+
+          <button
+            type="button"
+            onClick={handleNonDeleteButtonClick}
+            className="text-[#FFFFFF] bg-[#46526c] sm:rounded-full sm:mt-3 sm:w-20 sm:hover:bg-white/30  sm:hover:font-semibold"
+          >
+            <p className=" text-center p-1">Non</p>
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -3,17 +3,14 @@ import { Link } from "react-router-dom";
 import * as AiIcons from "react-icons/ai";
 import * as BsIcons from "react-icons/bs";
 import * as MdIcons from "react-icons/md";
-// import { useUserContext } from "../contexts/UserContext";
-import PrivateLink from "./PrivateLink";
-import Logout from "./Logout";
-import Header from "./Header";
-import Contact from "../pages/Contact";
-import "./Navbar.css";
+import PrivateLink from "../components/PrivateLink";
+import Logout from "../components/Logout";
+import Contact from "./Contact";
+import "../components/Navbar.css";
+import Header from "../components/Header";
 
 export default function Navbar() {
   const [sidebar, setSidebar] = useState(false);
-
-  // const { user } = useUserContext();
 
   const showSidebar = () => setSidebar(!sidebar);
 
@@ -23,11 +20,13 @@ export default function Navbar() {
         <button type="button" className="menu-bars">
           <AiIcons.AiOutlineMenu onClick={showSidebar} />
         </button>
-        <div className="flex justify-center  w-[88%] text-4xl">
+        <div className="flex justify-center w-[88%] text-4xl">
           <Link to="/">
             <p className="header-style-text ">DRAWING AND CO</p>
           </Link>
-          <Header />
+          <div className="absolute right-4">
+            <Header />
+          </div>
         </div>
       </div>
       <div className="text-white ">

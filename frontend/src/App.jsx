@@ -9,7 +9,7 @@ import SignUp from "./pages/SignUp";
 import Gallery from "./pages/Gallery";
 import MyProfile from "./pages/MyProfile";
 import Connection from "./pages/Connection";
-import Navbar from "./components/Navbar";
+import Navbar from "./pages/Navbar";
 import Logout from "./components/Logout";
 import EditMyProfile from "./pages/EditMyProfile";
 import ChangePassword from "./components/ChangePassword";

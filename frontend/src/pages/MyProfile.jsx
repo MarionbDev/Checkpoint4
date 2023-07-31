@@ -22,11 +22,6 @@ export default function MyProfile() {
           <div className="flex flex-col justify-center ">
             <div className="flex flex-col items-center mx-6 p-4 mt-4">
               <p className="mb-3">Mon pseudo : </p>
-              <img
-                src={user.avatar}
-                className=" h-20 w-20 rounded-full"
-                alt="Avatar"
-              />
             </div>
             <p className="text-center mt-5">{user.pseudo}</p>
           </div>

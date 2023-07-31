@@ -30,7 +30,6 @@ export default function EditMyProfile() {
         setPseudo(data.pseudo);
         setAvatar(data.avatar);
         setAbout(data.about);
-        setAvatar(data.avatar);
         setMail(data.mail);
       })
       .catch((err) => console.error(err));

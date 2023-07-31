@@ -15,9 +15,11 @@ router.get(
 );
 
 router.put("/:id", userControllers.edit);
+
 router.post(
   "/",
   userControllers.hashPassword,
+
   userControllers.add,
   userControllers.read // données renvoyées sans le champ password
 );
