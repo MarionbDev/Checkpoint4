@@ -22,3 +22,9 @@ body {
   grid-column-gap: 20px;
   grid-row-gap: 28px;
 }
+
+@media screen and (max-width: 640px) {
+  .parent {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

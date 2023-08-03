@@ -58,18 +58,19 @@ export default function GetAllUser() {
     <div>
       {user.map((item) => {
         return (
-          <div key={item.id} className="grid grid-cols-4 gap-2 py-1 ">
+          <div key={item.id} className="grid sm:grid-cols-4 gap-2 py-1 w-full ">
             <p className="flex">
               {item.firstname} {item.lastname}
             </p>
 
             <p>{item.pseudo}</p>
             <p>{item.mail}</p>
-            <div className="flex justify-center items-center">
+
+            <div className="flex justify-center items-start   sm:items-center">
               <button
                 type="button"
                 onClick={() => handleDeleteOpenModal(item.id)}
-                className="hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#23273f] rounded-full p-2 hover:text-black"
+                className="bg-[#a1aee0] md sm:bg-[#4e557a] hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#23273f] rounded-full p-2 hover:text-black"
               >
                 <p>
                   <BsIcons.BsTrash />

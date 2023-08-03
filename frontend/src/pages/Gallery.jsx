@@ -32,14 +32,14 @@ export default function Gallery() {
 
   return (
     <div className="min-h-screen flex flex-col ">
-      <div className="flex justify-start pt-28 border-b-2 border-[#282e4d] mx-10 mb-5">
-        <p className="text-5xl ml-2">GALERIE</p>
+      <div className="flex justify-start pt-28 border-b-2 border-[#282e4d] ml-2 sm:mx-10 mb-5">
+        <p className=" text-2xl sm:text-5xl ml-2">GALERIE</p>
       </div>
 
-      <div className="px-8 parent mb-14">
+      <div className="flex  sm:px-8 parent mb-14">
         {drawList.map((item) => (
           <div
-            className=" h-[25rem] md:flex flex-col justify-between rounded-md shadow-lg shadow-[#a4aac1] bg-[#e0e5fb] p-2  "
+            className=" h-[25rem] flex flex-col justify-between rounded-md shadow-lg shadow-[#a4aac1] bg-[#e0e5fb] p-2  "
             key={item.id}
           >
             <div className="">

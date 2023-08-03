@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import drawingCreationSchema from "../schemas/drawingSchemas";
+// import {drawingCreationSchema} from "../schemas/drawingSchemas"
 
 const imageTypes = ["image/jpeg", "image/jpg", "image/png"];
 
@@ -21,56 +23,80 @@ export default function AdminCreateDrawing() {
   };
 
   const handleChangeImage = (e) => {
-    // console.log(e);
     const fileSelected = e.target.files[0];
     if (imageTypes.includes(fileSelected.type)) {
       setImage(e.target.files[0]);
     } else {
-      alert("Only jpeg, jpg and png are allowed");
+      alert("Seulement les formats jpeg, jpg et png sont autorisés");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title || !image) {
-      alert("Veuillez remplir tous les champs!!!");
-    } else {
-      const drawingData = new FormData();
-      drawingData.append("drawingImage", image);
-      drawingData.append("title", title);
-      drawingData.append("description", description);
+    drawingCreationSchema
+      .validate(
+        {
+          title,
+          description,
+          image,
+        },
+        { abortEarly: false }
+      )
+      .then(() => {
+        // La validation a réussi, vous pouvez effectuer une action ici
+        // ou envoyer le dessin au backend pour enregistrement
+        const drawingData = new FormData();
+        drawingData.append("drawingImage", image);
+        drawingData.append("title", title);
+        drawingData.append("description", description);
 
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/drawings`, {
-        method: "POST",
-        credentials: "include",
-        body: drawingData,
-      })
-        .then((res) => res.json())
-        .then(() => {
-          navigate(`/admin`);
-          alert("Le dessin a été créé avec succès !");
-          setTitle("");
-          setDescription("");
-          setImage("");
-          fileInputRef.current.value = null;
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/drawings`, {
+          method: "POST",
+          credentials: "include",
+          body: drawingData,
         })
-        .catch((err) => {
-          console.error(err);
-          alert("Error to create the drawing, please try again!!!");
-        });
-    }
+          .then((res) => res.json())
+          .then(() => {
+            // Le dessin a été enregistré avec succès
+            // alert("Le dessin a été créé avec succès !");
+            navigate(`/gallery`);
+            setTitle("");
+            setDescription("");
+            setImage("");
+            if (fileInputRef.current) {
+              fileInputRef.current.value = null;
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Erreur à la création, essayez encore !!");
+          });
+      })
+      .catch((err) => {
+        // La validation a échoué, traitez les erreurs ici
+        const drawingErrors = err.inner.reduce((acc, error) => {
+          return {
+            ...acc,
+            [error.path]: { hasError: true, message: error.message },
+          };
+        }, {});
+        console.error("Error Yup :", drawingErrors);
+      });
   };
 
   return (
-    <div className="mb-12">
+    <div className="mb-12 ">
       <section className="flex flex-col items-center ">
-        <form onSubmit={handleSubmit} className="flex justify-between gap-14">
-          <label htmlFor="title">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col md:px-8 md:flex-row justify-between md:flex-wrap  lg:flex-nowrap gap-4 md:gap-2 xl:gap-14"
+        >
+          <label htmlFor="title" className="flex flex-col">
             Titre :
             <input
               ref={fileInputRef}
-              className=" bg-[#e2e4eb] hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4]0 rounded-md ml-2 w-auto  p-2"
+              className=" bg-[#e2e4eb] hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4]0 rounded-md ml-2 w-full p-2"
               type="text"
               id="title"
               required
@@ -78,7 +104,7 @@ export default function AdminCreateDrawing() {
               onChange={handleChangeTitle}
             />
           </label>
-          <label htmlFor="description">
+          <label htmlFor="description" className="flex flex-col">
             Description :
             <input
               className=" bg-[#e2e4eb] hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4] rounded-md ml-2 w-auto  p-2"
@@ -88,7 +114,7 @@ export default function AdminCreateDrawing() {
               onChange={handleChangeDescription}
             />
           </label>
-          <label htmlFor="image">
+          <label htmlFor="image" className="flex flex-col">
             Image :
             <input
               className=" bg-slate-200 p-[5px] ml-2 hover:text-white hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4]"
@@ -96,11 +122,12 @@ export default function AdminCreateDrawing() {
               id="image"
               required
               onChange={handleChangeImage}
+              ref={fileInputRef}
             />
           </label>
           <button
             type="submit"
-            className="rounded-md px-6 hover:text-white hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4]  bg-[#ccd3f1]"
+            className="rounded-md px-6 hover:text-white hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4]  bg-[#ccd3f1] mt-8 sm:mt-0 md:px-12 md:py-3 lg:px-6 lg:py-0"
           >
             Enregistrer
           </button>

@@ -32,7 +32,6 @@ const models = {};
 const UserManager = require("./UserManager");
 const DrawingManager = require("./DrawingManager");
 const CommentManager = require("./CommentManager");
-const FavoriteDrawingManager = require("./FavoritesDrawingManager");
 
 models.user = new UserManager();
 models.user.setDatabase(pool);
@@ -40,8 +39,6 @@ models.drawing = new DrawingManager();
 models.drawing.setDatabase(pool);
 models.comment = new CommentManager();
 models.comment.setDatabase(pool);
-models.favoriteDrawing = new FavoriteDrawingManager();
-models.favoriteDrawing.setDatabase(pool);
 
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model

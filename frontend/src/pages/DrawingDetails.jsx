@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Modal } from "react-responsive-modal";
 import * as BsIcons from "react-icons/bs";
+import * as AiIcons from "react-icons/ai";
+import { format } from "date-fns";
 import { useUserContext } from "../contexts/UserContext";
 
 export default function DrawingDetails() {
   const navigate = useNavigate();
   const [drawing, setDrawing] = useState();
   const [newComment, setNewComment] = useState([]);
-  const [commentList, setCommentList] = useState([]);
   const [userList, setUsersList] = useState([]);
+  const [commentList, setCommentList] = useState([]);
   const [selectedComment, setSelectedComment] = useState(null);
 
   const [selectedDrawingId, setSelectedDrawingId] = useState(null);
@@ -69,8 +71,16 @@ export default function DrawingDetails() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const currentDate = new Date();
+    const formattedDate = currentDate
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+
     const data = {
       comment: newComment,
+      dateTime: formattedDate,
       userId: user.id,
       drawingId: drawing.id,
     };
@@ -159,67 +169,96 @@ export default function DrawingDetails() {
             alt="Drawing"
             className=" border-8 border-black  "
           />
-          <div className=" flex flex-col mt-4 text-xl">
-            <p className="="> {drawing.title}</p>
-            <p className="="> {drawing.description}</p>
-          </div>
-          <div className="flex justify-between">
-            {user.role === "admin" && (
-              <button
-                type="button"
-                onClick={() => handleDeleteOpenModal(drawing.id)}
-                className="mr-1 mt-1 hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] rounded-full p-2"
-              >
-                <p>
-                  <BsIcons.BsTrash />
-                </p>
-              </button>
-            )}
+          <div className="flex items-center gap-5  mt-4  ">
+            <div className=" flex flex-col text-xl">
+              <p className="="> {drawing.title}</p>
+              <p className="="> {drawing.description}</p>
+            </div>
+            <div className="flex items-center">
+              {user.role === "admin" && (
+                <button
+                  type="button"
+                  onClick={() => handleDeleteOpenModal(drawing.id)}
+                  className="mr-1 mt-1 hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white bg-[#d3d9f3]  rounded-full p-3 duration-200"
+                >
+                  <p>
+                    <BsIcons.BsTrash />
+                  </p>
+                </button>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex justify-center items-center">
-          <div className="flex flex-col w-6/12">
-            <p className="mb-2">Commentaires : </p>
-            <div className="flex flex-col justify-between border-2 border-black h-96 p-4 ">
-              <div className="flex flex-col ">
-                {commentList.map((item) => {
+          <div className="flex flex-col w-9/12 rounded-lg shadow-xl shadow-[#a4aac1] bg-[#cbd1f0] p-4">
+            <p className="mb-2 ml-2 text-[#1b265d] font-semibold italic">
+              Commentaires :{" "}
+            </p>
+            <div className="flex flex-col justify-between rounded-md shadow-xl shadow-[#4c5268] bg-[#cbd1f0] h-96 p-4 mb-6 ">
+              <div className="flex flex-col  overflow-y-auto overflow-hidden scrollbar-thumb ">
+                {commentList.map((item, index) => {
                   const commentUser = userList.find(
                     (userItem) => userItem.id === item.user_id
                   );
+
                   return (
-                    <div className="flex">
-                      <div className="flex  ">
-                        <p className="mr-2">{commentUser.pseudo} : </p>
-                        <p>{item.comment}</p>
-                        {user.role === "admin" && (
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            <p>
-                              <BsIcons.BsTrash />
+                    <div className=" ">
+                      <div
+                        className={`flex justify-between ${
+                          index % 2 === 0
+                            ? "bg-[#939dd3] text-[#1b265d] "
+                            : "bg-white text-[#1b265d]"
+                        } p-2 rounded-md mb-1  `}
+                      >
+                        <div className="flex">
+                          <p className="w-auto text-base mr-2 ">
+                            {commentUser.pseudo} :
+                          </p>
+                          <div className="flex flex-col">
+                            <p className=" text-base w-72 ">{item.comment}</p>
+                            <p className="italic text-xs">
+                              {format(
+                                new Date(item.dateTime),
+                                "dd-MM-yyyy HH:mm"
+                              )}
                             </p>
-                          </button>
-                        )}
+                          </div>
+                        </div>
+                        <div className="flex justify-center w-8 h-8 rounded-full hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white  duration-200">
+                          {user.role === "admin" && (
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              <p>
+                                <BsIcons.BsTrash />
+                              </p>
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   );
                 })}
               </div>
             </div>
-            <div className=" flex justify-center items-center border-2 h-24">
+            <div className=" flex justify-between items-center border-2 h-13 p-1 rounded-md shadow-xl shadow-[#4c5268] bg-[#cbd1f0]">
               <textarea
                 id="comment"
                 name="comment"
-                rows="3"
+                rows="1"
                 cols="55"
                 value={newComment}
                 onChange={handleChangeComment}
-                placeholder="Laisser un commentaire ! "
-                className=" p-2 italic "
+                placeholder="Laissez un commentaire ! "
+                className=" p-2 italic rounded-md text-sm "
               />
-              <button type="button" onClick={handleSubmit}>
-                Ok
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="mx-2 p-1 rounded-full hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white duration-200"
+              >
+                <AiIcons.AiOutlineMessage className="h-5 w-5" />
               </button>
             </div>
           </div>
