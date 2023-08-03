@@ -13,43 +13,37 @@ export default function MyProfile() {
   }
 
   return (
-    <div>
+    <>
       <div className="flex justify-between border-b-2 border-[#282e4d] mx-10 pt-28">
         <p className="text-3xl  ml-2 ">Gestion de mon profil</p>
       </div>
-      <div className=" text-white mt-20 mx-36 h-76 flex flex-col  p-5 rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] ">
-        <div className="flex items-center gap-36 mb-2">
-          <div className="flex flex-col justify-center ">
-            <div className="flex flex-col items-center mx-6 p-4 mt-4">
-              <p className="mb-3">Mon pseudo : </p>
-              <img
-                src={user.avatar}
-                className=" h-20 w-20 rounded-full"
-                alt="Avatar"
-              />
-            </div>
-            <p className="text-center mt-5">{user.pseudo}</p>
-          </div>
-          <div className="flex">
-            <div className="flex flex-col">
+      <div className="flex justify-center mb-8 mt-8 sm:mb-0 md:mt-20">
+        <div className="flex flex-col justify-center text-white p-8 mx-10 mb-8 xl:p-0 md:mx-36 xl:mx-48 xl:h-80 rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] ">
+          <div className="flex flex-col lg:flex-row lg:justify-around md:gap-12 lg:gap-24 lg:mx-10 items-center">
+            <div className="flex flex-col ">
+              <p className="mb-3">Mon pseudo : {user.pseudo} </p>
               <p className="mb-2">Prénom : {user.firstname}</p>
               <p className="mb-2">Nom : {user.lastname}</p>
               <p>Mail : {user.mail}</p>
             </div>
+            <div className="flex flex-col  sm:mr-10 mt-10 sm:mt-0 ">
+              <p className="sm:mb-2">A propos : </p>
+              <p>{user.about}</p>
+            </div>
           </div>
-          <p>A propos : {user.about}</p>
-        </div>
-        <div className="flex justify-center">
-          <Link
-            to={`/edit-profile/${user.id}`}
-            className=" hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] p-2 rounded-full"
-          >
-            <button className="px-4" type="button">
-              Modifier mon profile
-            </button>
-          </Link>
+
+          <div className="flex justify-center mt-8 sm:mt-14">
+            <Link
+              to={`/edit-profile/${user.id}`}
+              className=" hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] p-2 rounded-full"
+            >
+              <button className="px-4" type="button">
+                Modifier mon profile
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

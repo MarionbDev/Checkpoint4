@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { userCreationSchema } from "../schemas/userSchemas";
 
 export default function SignUp() {
   const [firstname, setFirstname] = useState("");
@@ -38,34 +39,54 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!firstname || !lastname || !mail || !password) {
-      alert(
-        "You must provide firstname, lastname, an email and a password!!!!"
-      );
-    } else {
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+    userCreationSchema
+      .validate(
+        {
           firstname,
           lastname,
           mail,
           password,
           about,
           pseudo,
-        }),
-      })
-        .then((res) => res.json())
-        .then(() => {
-          navigate(`/login`);
+        },
+        { abortEarly: false }
+      )
+      .then(() => {
+        // Le reste de votre code ici
+
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstname,
+            lastname,
+            mail,
+            password,
+            about,
+            pseudo,
+          }),
         })
-        .catch(() => {
-          alert("Error to create your account, please try again!!!");
-        });
-    }
+          .then((res) => res.json())
+          .then(() => {
+            navigate(`/login`);
+          })
+          .catch(() => {
+            alert("Error to create your account, please try again!!!");
+          });
+      })
+      .catch((err) => {
+        // La validation a échoué, traitez les erreurs ici
+        const drawingErrors = err.inner.reduce((acc, error) => {
+          return {
+            ...acc,
+            [error.path]: { hasError: true, message: error.message },
+          };
+        }, {});
+        console.error("Error Yup :", drawingErrors);
+      });
   };
 
   return (

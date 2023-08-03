@@ -3,12 +3,10 @@ const router = require("express").Router();
 const drawingControllers = require("../controllers/drawingControllers");
 const authControllers = require("../controllers/authControllers");
 const uploadDrawingImage = require("../controllers/uploadControllers");
-const favoriteControllers = require("../controllers/favoriteDrawingControllers");
 const commentControllers = require("../controllers/commentControllers");
 
 router.get("/", drawingControllers.browse);
 router.get("/:id", drawingControllers.read);
-router.get("/:id", favoriteControllers.findAllFavoritesByDrawing);
 router.get("/:id", commentControllers.allCommentByDrawing);
 
 router.put("/:id", drawingControllers.edit);

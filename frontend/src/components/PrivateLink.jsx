@@ -18,7 +18,7 @@ export default function PrivateLink({ authorizedRoles, to, text }) {
 }
 
 PrivateLink.propTypes = {
-  authorizedRoles: PropTypes.string.isRequired,
+  authorizedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   to: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.node.isRequired,
 };

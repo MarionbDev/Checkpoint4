@@ -12,10 +12,8 @@ export default function Logout() {
   };
 
   return (
-    <Link to="/gallery">
-      <button type="button" onClick={handleLogout}>
-        Déconnexion
-      </button>
+    <Link to="/gallery" onClick={handleLogout}>
+      <div>Déconnexion</div>
     </Link>
   );
 }

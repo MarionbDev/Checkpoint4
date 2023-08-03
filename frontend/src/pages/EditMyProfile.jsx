@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
-
-// import MyCreation from "../components/MyCreation";
+import { userUpdateSchema } from "../schemas/userSchemas";
 
 export default function EditMyProfile() {
   const [userProf, setUserProf] = useState([]);
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
   const [pseudo, setPseudo] = useState("");
-  const [avatar, setAvatar] = useState("");
   const [about, setAbout] = useState("");
   const [mail, setMail] = useState("");
 
@@ -23,14 +21,11 @@ export default function EditMyProfile() {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        // console.log("data users:", data);
         setUserProf(data);
         setLastname(data.lastname);
         setFirstname(data.firstname);
         setPseudo(data.pseudo);
-        setAvatar(data.avatar);
         setAbout(data.about);
-        setAvatar(data.avatar);
         setMail(data.mail);
       })
       .catch((err) => console.error(err));
@@ -41,7 +36,6 @@ export default function EditMyProfile() {
       setLastname(user.lastname);
       setFirstname(user.firstname);
       setPseudo(user.pseudo);
-      setAvatar(user.avatar);
       setAbout(user.about);
       setMail(user.mail);
     }
@@ -55,25 +49,49 @@ export default function EditMyProfile() {
       firstname,
       pseudo,
       about,
-      avatar,
       mail,
     };
 
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updateUser),
-    })
+    userUpdateSchema
+      .validate(
+        {
+          firstname,
+          lastname,
+          mail,
+          about,
+          pseudo,
+        },
+        { abortEarly: false }
+      )
       .then(() => {
-        // console.log("User updated successfully:", data);
-        dispatch({ type: "UPDATE_USER", payload: updateUser });
-        navigate("/my-profile");
+        // Le reste de votre code ici
+
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateUser),
+        })
+          .then(() => {
+            // console.log("User updated successfully:", data);
+            dispatch({ type: "UPDATE_USER", payload: updateUser });
+            navigate("/my-profile");
+          })
+          .catch((error) => {
+            console.error("Error updating user:", error);
+          });
       })
-      .catch((error) => {
-        console.error("Error updating user:", error);
+      .catch((err) => {
+        // La validation a échoué, traitez les erreurs ici
+        const drawingErrors = err.inner.reduce((acc, error) => {
+          return {
+            ...acc,
+            [error.path]: { hasError: true, message: error.message },
+          };
+        }, {});
+        console.error("Error Yup :", drawingErrors);
       });
   };
 
@@ -92,94 +110,91 @@ export default function EditMyProfile() {
   return (
     <div className="">
       <div className="flex justify-between border-b-2 border-[#282e4d] mx-10 pt-28">
-        <p className="text-3xl  ml-2 ">Mettre à jour mon profil</p>
+        <p className="text-xl sm:text-3xl  ml-2 ">Mettre à jour mon profil</p>
       </div>
-      <section>
-        <div className="  mt-20 mx-96 h-76 flex flex-col  p-5 rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] ">
-          <form>
-            <div className="flex flex-col gap-10">
-              <div className="flex justify-between">
-                <label htmlFor="firstname" className="">
-                  Prénom :
-                </label>
-                <input
-                  type="text"
-                  id="firstname"
-                  required
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
-                  className="w-full"
-                />
+      <section className="flex justify-center sm:mt-8 mb-8">
+        <div className="text-white rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] xl:w-3/6 m-8 sm:m-0  ">
+          <form className=" flex flex-col gap-4 p-10">
+            <div className="flex flex-col gap-3 sm:gap-8 mx-auto w-full ">
+              <div className="flex flex-col lg:flex-row gap-3 sm:gap-8  ">
+                <div className="flex flex-col sm:justify-between sm:flex-row sm:gap-2 w-full">
+                  <label htmlFor="firstname" className="">
+                    Prénom :
+                  </label>
+                  <input
+                    type="text"
+                    id="firstname"
+                    required
+                    value={firstname}
+                    onChange={(e) => setFirstname(e.target.value)}
+                    className="shadow-[#0e0f14] shadow-xl flex sm:w-4/6 h-8 px-2 text-black bg-[#d9dae2] rounded-md "
+                  />
+                </div>
+                <div className="flex flex-col  sm:justify-between sm:flex-row sm:gap-2 w-full ">
+                  <label htmlFor="lastname">Nom :</label>
+                  <input
+                    type="text"
+                    id="lastname"
+                    required
+                    value={lastname}
+                    onChange={(e) => setLastname(e.target.value)}
+                    className="shadow-[#0e0f14] shadow-xl flex sm:w-4/6 h-8 px-2 text-black bg-[#d9dae2] rounded-md"
+                  />
+                </div>
               </div>
-              <div>
-                <label htmlFor="lastname" className="">
-                  Nom :
-                </label>
-                <input
-                  type="text"
-                  id="lastname"
-                  required
-                  value={lastname}
-                  onChange={(e) => setLastname(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="pseudo" className="">
-                  Pseudo :
-                </label>
-                <input
-                  type="text"
-                  id="pseudo"
-                  required
-                  value={pseudo}
-                  onChange={(e) => setPseudo(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="mail" className="">
-                  Mail :
-                </label>
-                <input
-                  type="text"
-                  id="mail"
-                  required
-                  value={mail}
-                  onChange={(e) => setMail(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="avatar" className="">
-                  Avatar :
-                </label>
-                <input
-                  type="text"
-                  id="avatar"
-                  required
-                  value={avatar}
-                  onChange={(e) => setAvatar(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="about" className="">
-                  A propos :
-                </label>
-                <input
-                  type="text"
-                  id="about"
-                  required
-                  value={about}
-                  onChange={(e) => setAbout(e.target.value)}
-                />
+              <div className="flex flex-col lg:flex-row  gap-3 sm:gap-8 items-center ">
+                <div className="flex flex-col  sm:justify-between sm:flex-row sm:gap-2 w-full">
+                  <label htmlFor="pseudo" className=" flex items-center">
+                    Pseudo :
+                  </label>
+                  <input
+                    type="text"
+                    id="pseudo"
+                    required
+                    value={pseudo}
+                    onChange={(e) => setPseudo(e.target.value)}
+                    className="shadow-[#0e0f14] shadow-xl flex sm:w-4/6 h-8 px-2 text-black bg-[#d9dae2] rounded-md"
+                  />
+                </div>
+                <div className="flex flex-col  sm:justify-between sm:flex-row sm:gap-2 w-full">
+                  <label htmlFor="mail" className="flex items-center w-12">
+                    Mail :
+                  </label>
+                  <input
+                    type="text"
+                    id="mail"
+                    required
+                    value={mail}
+                    onChange={(e) => setMail(e.target.value)}
+                    className="shadow-[#0e0f14] shadow-xl flex w-full h-8 px-2 text-black bg-[#d9dae2] rounded-md"
+                  />
+                </div>
               </div>
             </div>
-
-            <button
-              className=" bg-slate-400"
-              type="submit"
-              onClick={handleHupdateUser}
-            >
-              Sauvegarder
-            </button>
+            <div className="h-48 mt-4">
+              <label htmlFor="about" className="">
+                A propos :
+              </label>
+              <textarea
+                rows={6}
+                cols={40}
+                className="shadow-[#0e0f14] shadow-xl flex w-full mt-2 p-2 text-black bg-[#d9dae2] rounded-md"
+                type="text"
+                id="about"
+                value={about}
+                required
+                onChange={(e) => setAbout(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-center mt-4 ">
+              <button
+                className="hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] p-2 rounded-full"
+                type="submit"
+                onClick={handleHupdateUser}
+              >
+                Sauvegarder
+              </button>
+            </div>
           </form>
         </div>
       </section>
