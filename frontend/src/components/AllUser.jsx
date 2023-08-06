@@ -54,23 +54,27 @@ export default function GetAllUser() {
     );
   }
 
+  const sortedUsers = [...user].sort((a, b) =>
+    a.firstname.localeCompare(b.firstname)
+  );
+
   return (
     <div>
-      {user.map((item) => {
+      {sortedUsers.map((item) => {
         return (
           <div key={item.id} className="grid sm:grid-cols-4 gap-2 py-1 w-full ">
-            <p className="flex">
-              {item.firstname} {item.lastname}
-            </p>
-
+            <div className="md:grid md:grid-cols-2">
+              <p className=" ">{item.firstname} </p>
+              <p>{item.lastname}</p>
+            </div>
             <p>{item.pseudo}</p>
-            <p>{item.mail}</p>
+            <p className="flex truncate lg:w-72">{item.mail}</p>
 
-            <div className="flex justify-center items-start   sm:items-center">
+            <div className="flex justify-center items-start   sm:items-center ml-10 ">
               <button
                 type="button"
                 onClick={() => handleDeleteOpenModal(item.id)}
-                className="bg-[#a1aee0] md sm:bg-[#4e557a] hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#23273f] rounded-full p-2 hover:text-black"
+                className="bg-[#a1aee0] md sm:bg-[#4e557a] hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#23273f] rounded-full p-2 hover:text-black duration-300"
               >
                 <p>
                   <BsIcons.BsTrash />

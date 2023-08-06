@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import * as AiIcons from "react-icons/ai";
 import * as BsIcons from "react-icons/bs";
 import * as MdIcons from "react-icons/md";
+import * as GoIcons from "react-icons/go";
+
 import { useUserContext } from "../contexts/UserContext";
 import PrivateLink from "../components/PrivateLink";
 import Logout from "../components/Logout";
@@ -23,11 +25,11 @@ export default function Navbar() {
         <button type="button" className="menu-bars">
           <AiIcons.AiOutlineMenu onClick={showSidebar} />
         </button>
-        <div className="flex justify-center w-[88%] text-4xl">
+        <div className="flex justify-center w-[70%] text-xl sm:w-[80%] md:w-[88%] sm:text-4xl">
           <Link to="/">
             <p className="header-style-text ">DRAWING AND CO</p>
           </Link>
-          <div className="absolute right-4">
+          <div className="absolute right-2 top-2 sm:right-4 md:top-4  ">
             <Header />
           </div>
         </div>
@@ -74,7 +76,13 @@ export default function Navbar() {
                     }
                     authorizedRoles={["admin"]}
                   />
-                  <li className="nav-text p-0 ">
+                  <li className=" nav-text ">
+                    <Link to="/faq">
+                      <GoIcons.GoQuestion />
+                      <span className="ml-4 ">FAQ</span>
+                    </Link>
+                  </li>
+                  <li className="nav-text  ">
                     <Contact />
                   </li>
                 </div>
@@ -152,7 +160,12 @@ export default function Navbar() {
                       <span className="ml-4 ">S'enregistrer</span>
                     </Link>
                   </li>
-
+                  <li className=" nav-text ">
+                    <Link to="/faq">
+                      <GoIcons.GoQuestion />
+                      <span className="ml-4 ">FAQ</span>
+                    </Link>
+                  </li>
                   <li className="nav-text p-0 ">
                     <Contact />
                   </li>

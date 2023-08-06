@@ -59,6 +59,7 @@
 
 .nav-text a:hover {
   background-color: #27405f;
+  height: 60px;
 }
 
 .navbar-toggle {

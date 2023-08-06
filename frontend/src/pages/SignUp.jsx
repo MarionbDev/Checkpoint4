@@ -90,18 +90,18 @@ export default function SignUp() {
   };
 
   return (
-    <section className=" pt-36 flex  text-black">
+    <section className="pt-28 sm:pt-32 sm:flex px-4 text-black">
       <form
         onSubmit={handleSubmit}
-        className="bg-[#282e4d] shadow-[#1a1c27] shadow-xl rounded-xl text-white px-20 py-10 w-6/12 m-auto flex flex-col"
+        className="bg-[#282e4d] shadow-[#1a1c27] shadow-xl rounded-xl text-white px-4 sm:px-20 py-10 xl:w-6/12 m-auto mb-4 flex flex-col"
       >
-        <div className="flex flex-col w-auto">
-          <div className="flex gap-3 mb-5">
+        <div className="flexflex-col w-auto">
+          <div className="sm:flex gap-3 mb-2 sm:mb-5">
             <label htmlFor="pseudo" className=" flex items-center">
               Pseudo :{" "}
             </label>
             <input
-              className="shadow-[#0e0f14] shadow-xl flex w-2/6 h-8 px-2 text-black bg-[#d9dae2] rounded-md"
+              className="shadow-[#0e0f14] shadow-xl flex w-full sm:w-2/6 sm:h-8 px-2 text-black bg-[#d9dae2] rounded-md"
               type="text"
               id="pseudo"
               value={pseudo}
@@ -110,12 +110,12 @@ export default function SignUp() {
             />
           </div>
 
-          <div className="flex gap-3 mb-3 flex-wrap">
-            <label htmlFor="firstname" className=" flex items-center">
-              Prénom :{" "}
+          <div className="sm:flex gap-3 mb-3 flex-wrap">
+            <label htmlFor="firstname" className="flex items-center ">
+              * Prénom :
             </label>
             <input
-              className="w-full shadow-[#0e0f14] shadow-xl h-8 px-2 text-black flex-1 bg-[#d9dae2] rounded-md"
+              className="w-full shadow-[#0e0f14] shadow-xl sm:h-8 px-2 text-black flex-1 bg-[#d9dae2] rounded-md mb-2 sm:mb-0"
               type="text"
               id="firstname"
               value={firstname}
@@ -123,10 +123,10 @@ export default function SignUp() {
               onChange={handleChangeFirstname}
             />
             <label htmlFor="lastname" className=" flex items-center">
-              Nom :{" "}
+              * Nom :{" "}
             </label>
             <input
-              className="shadow-[#0e0f14] shadow-xl flex w-full px-2 h-8 text-black flex-1 bg-[#d9dae2] rounded-md"
+              className="shadow-[#0e0f14] shadow-xl flex w-full px-2 sm:h-8 text-black flex-1 bg-[#d9dae2] rounded-md"
               type="text"
               id="lastname"
               value={lastname}
@@ -134,25 +134,27 @@ export default function SignUp() {
               onChange={handleChangeLastname}
             />
           </div>
-          <label htmlFor="about" className="mb-2">
-            A propos de vous :
-          </label>
-          <textarea
-            rows={5}
-            cols={40}
-            className=" shadow-[#0e0f14] shadow-xl text-black  flex-1 mb-5 px-4 py-3 bg-[#d9dae2] rounded-md"
-            type="text"
-            id="about"
-            value={about}
-            required
-            onChange={handleChangeAbout}
-          />
-          <div className="flex gap-3 ">
+          <div className="sm:flex sm:flex-col">
+            <label htmlFor="about" className="mb-2">
+              A propos de vous :
+            </label>
+            <textarea
+              rows={5}
+              cols={40}
+              className=" shadow-[#0e0f14] shadow-xl text-black flex-1 mb-5 px-4 py-3 bg-[#d9dae2] rounded-md w-full"
+              type="text"
+              id="about"
+              value={about}
+              required
+              onChange={handleChangeAbout}
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 ">
             <label htmlFor="mail" className=" flex items-center">
-              Email :{" "}
+              * Email :{" "}
             </label>
             <input
-              className="shadow-[#0e0f14] shadow-xl w-full h-8 px-2 text-black flex-1 bg-[#d9dae2] rounded-md"
+              className="shadow-[#0e0f14] shadow-xl w-full sm:h-8 px-2 text-black flex-1 bg-[#d9dae2] rounded-md"
               type="mail"
               id="mail"
               value={mail}
@@ -160,10 +162,10 @@ export default function SignUp() {
               onChange={handleChangeEmail}
             />
             <label htmlFor="password" className=" flex items-center">
-              Mot de passe :{" "}
+              * Mot de passe :{" "}
             </label>
             <input
-              className="w-full shadow-[#0e0f14] shadow-xl h-8 px-2 text-black flex-1 bg-[#d9dae2] rounded-md "
+              className="w-full shadow-[#0e0f14] shadow-xl sm:h-8 px-2 text-black flex-1 bg-[#d9dae2] rounded-md "
               type="password"
               id="password"
               value={password}
@@ -180,6 +182,7 @@ export default function SignUp() {
             <p className="text-sm">Finaliser votre inscription</p>
           </button>
         </div>
+        <p className="italic text-xs">* Mentions obligatoire</p>
       </form>
     </section>
   );

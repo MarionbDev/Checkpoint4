@@ -15,6 +15,7 @@ import EditMyProfile from "./pages/EditMyProfile";
 import ChangePassword from "./components/ChangePassword";
 import Admin from "./pages/Admin";
 import DrawingDetails from "./pages/DrawingDetails";
+import FAQ from "./pages/FAQ";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" element={<Gallery />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Connection />} />
+        <Route path="/faq" element={<FAQ />} />
 
         <Route
           path="/"

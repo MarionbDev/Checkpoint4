@@ -15,13 +15,13 @@ export default function MyProfile() {
   return (
     <>
       <div className="flex justify-between border-b-2 border-[#282e4d] mx-10 pt-28">
-        <p className="text-3xl  ml-2 ">Gestion de mon profil</p>
+        <p className="text-xl sm:text-3xl  sm:ml-2 ">Gestion de mon profil</p>
       </div>
       <div className="flex justify-center mb-8 mt-8 sm:mb-0 md:mt-20">
         <div className="flex flex-col justify-center text-white p-8 mx-10 mb-8 xl:p-0 md:mx-36 xl:mx-48 xl:h-80 rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] ">
           <div className="flex flex-col lg:flex-row lg:justify-around md:gap-12 lg:gap-24 lg:mx-10 items-center">
-            <div className="flex flex-col ">
-              <p className="mb-3">Mon pseudo : {user.pseudo} </p>
+            <div className="flex flex-col">
+              <p className="mb-2">Mon pseudo : {user.pseudo} </p>
               <p className="mb-2">Prénom : {user.firstname}</p>
               <p className="mb-2">Nom : {user.lastname}</p>
               <p>Mail : {user.mail}</p>

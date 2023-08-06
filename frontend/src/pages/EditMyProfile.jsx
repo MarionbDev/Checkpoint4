@@ -188,7 +188,7 @@ export default function EditMyProfile() {
             </div>
             <div className="flex justify-center mt-4 ">
               <button
-                className="hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] p-2 rounded-full"
+                className="hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] py-2 px-3 rounded-full duration-300"
                 type="submit"
                 onClick={handleHupdateUser}
               >
