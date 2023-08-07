@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useUserContext } from "../contexts/UserContext";
-import "./Navbar.css";
+import "../pages/css/Navbar.css";
 
 export default function PrivateLink({ authorizedRoles, to, text }) {
   const [{ user }] = useUserContext();

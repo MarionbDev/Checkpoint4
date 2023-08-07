@@ -156,11 +156,11 @@ export default function DrawingDetails() {
   }
 
   return (
-    <div className="mt-24 mx-20">
-      <div className="md:grid md:grid-cols-2  ">
+    <div className="mt-24">
+      <div className="md:grid md:grid-cols-2 mx-4 ">
         <div
           key={`details-${drawing.id}`}
-          className="flex flex-col items-center my-5 "
+          className="flex flex-col items-center my-5 mx-4 "
         >
           <img
             src={`${import.meta.env.VITE_BACKEND_URL}/public/assets/drawings/${
@@ -170,9 +170,9 @@ export default function DrawingDetails() {
             className=" border-8 border-black  "
           />
           <div className="flex items-center gap-5  mt-4  ">
-            <div className=" flex flex-col text-xl">
-              <p className="="> {drawing.title}</p>
-              <p className="="> {drawing.description}</p>
+            <div className=" flex flex-col">
+              <p className="text-sm sm:text-lg"> {drawing.title}</p>
+              <p className="text-sm sm:text-md"> {drawing.description}</p>
             </div>
             <div className="flex items-center">
               {user.role === "admin" && (
@@ -189,12 +189,12 @@ export default function DrawingDetails() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center">
-          <div className="flex flex-col w-9/12 rounded-lg shadow-xl shadow-[#a4aac1] bg-[#cbd1f0] p-4">
-            <p className="mb-2 ml-2 text-[#1b265d] font-semibold italic">
-              Commentaires :{" "}
+        <div className="flex justify-center items-center  ">
+          <div className="w-full sm:w-9/12 rounded-lg shadow-xl shadow-[#a4aac1] bg-[#939cc4] p-4">
+            <p className="mb-2 ml-2 text-[#FFFFFF] font-semibold italic">
+              Commentaires :
             </p>
-            <div className="flex flex-col justify-between rounded-md shadow-xl shadow-[#4c5268] bg-[#cbd1f0] h-96 p-4 mb-6 ">
+            <div className="flex flex-col justify-between rounded-md shadow-xl shadow-[#2b334f] bg-[#e1e4f6] h-96 p-4 mb-6 ">
               <div className="flex flex-col  overflow-y-auto overflow-hidden scrollbar-thumb ">
                 {commentList.map((item, index) => {
                   const commentUser = userList.find(
@@ -202,20 +202,18 @@ export default function DrawingDetails() {
                   );
 
                   return (
-                    <div className=" ">
+                    <div>
                       <div
                         className={`flex justify-between ${
                           index % 2 === 0
-                            ? "bg-[#939dd3] text-[#1b265d] "
+                            ? "bg-[#939cc4] text-[#191f3f] "
                             : "bg-white text-[#1b265d]"
-                        } p-2 rounded-md mb-1  `}
+                        }  rounded-md mb-1 p-1 `}
                       >
-                        <div className="flex">
-                          <p className="w-auto text-base mr-2 ">
-                            {commentUser.pseudo} :
-                          </p>
+                        <div className="flex flex-col">
+                          <p className=" text-base">{commentUser.pseudo} : </p>
                           <div className="flex flex-col">
-                            <p className=" text-base w-72 ">{item.comment}</p>
+                            <p className=" text-base mx-1 ">{item.comment}</p>
                             <p className="italic text-xs">
                               {format(
                                 new Date(item.dateTime),
@@ -224,17 +222,21 @@ export default function DrawingDetails() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex justify-center w-8 h-8 rounded-full hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white  duration-200">
-                          {user.role === "admin" && (
-                            <button
-                              type="button"
-                              onClick={() => handleDelete(item.id)}
-                            >
-                              <p>
-                                <BsIcons.BsTrash />
-                              </p>
-                            </button>
-                          )}
+                        <div>
+                          {user.role === "admin" || user.id === item.user_id ? (
+                            <div>
+                              <div className="flex justify-center items-center p-3  w-8 h-8 rounded-full hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white  duration-200">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDelete(item.id)}
+                                >
+                                  <p>
+                                    <BsIcons.BsTrash />
+                                  </p>
+                                </button>
+                              </div>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </div>
@@ -242,7 +244,7 @@ export default function DrawingDetails() {
                 })}
               </div>
             </div>
-            <div className=" flex justify-between items-center border-2 h-13 p-1 rounded-md shadow-xl shadow-[#4c5268] bg-[#cbd1f0]">
+            <div className=" flex justify-between items-center border-2 h-13 p-1 rounded-md shadow-xl shadow-[#2b334f] bg-[#cbd1f0]">
               <textarea
                 id="comment"
                 name="comment"

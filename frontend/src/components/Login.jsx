@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { useUserContext } from "../contexts/UserContext";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
@@ -24,10 +26,8 @@ export default function Login() {
     e.preventDefault();
 
     if (!email || !password) {
-      alert("You must provide an email and a password !");
+      toast.warning("Veuillez renseigner un email et un mot de passe !");
     } else {
-      // console.log("Email:", email); // Vérifier la valeur de email
-      // console.log("Password:", password); // Vérifier la valeur de password
       fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/login`, {
         method: "POST",
         credentials: "include", // cookie
@@ -37,51 +37,51 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       })
         .then((res) => {
-          // console.log("response :", res);
           return res.json();
         })
         .then((data) => {
           console.warn(data);
           dispatch({ type: "SET_USER", payload: data });
-          navigate(`/gallery`); // !!!! CHANGEMENT ROUTE T'EN QUE ID NULL
+          navigate(`/gallery`);
         })
         .catch((error) => {
           console.error("Error:", error);
-          alert("Error to login, please try again!!!");
+          toast.error("Erreur de connexion, veuillez rééssayer !!!");
         });
     }
   };
 
   return (
-    <section className=" min-h-screen flex pt-14 text-white">
+    <section className=" min-h-screen px-4 sm:flex sm:mt-8 mt-28 text-white">
       <form
         onSubmit={handleSubmit}
-        className="bg-[#282e4d] shadow-[#1a1c27] shadow-xl px-14 py-5 rounded-xl text-white  m-auto flex flex-col items-center  w-2/6 "
+        className="bg-[#282e4d] shadow-[#1a1c27] shadow-xl sm:px-14 py-5 rounded-xl text-white m-auto flex flex-col items-center "
       >
         <div>
           <label
             htmlFor="email"
-            className="flex text-md m-4 w-full items-center"
+            className="flex flex-col sm:flex-row text-md m-4 sm:w-full items-center"
           >
             Email :
             <input
-              className="shadow-[#0e0f14] shadow-xl ml-3 py-1 px-3 text-black flex-1 bg-[#d9dae2] rounded-md"
+              className="shadow-[#0e0f14] shadow-xl sm:ml-3 py-1 px-3 text-black flex-1 bg-[#d9dae2] rounded-md"
               type="email"
               id="email"
-              required
               value={email}
               onChange={handleChangeEmail}
             />
           </label>
         </div>
         <div className="flex">
-          <label htmlFor="password" className="flex text-md m-4 items-center">
+          <label
+            htmlFor="password"
+            className="flex flex-col sm:flex-row text-md m-4 items-center"
+          >
             Mot de passe :
             <input
-              className=" shadow-[#0e0f14] shadow-xl ml-3 py-1 px-3 bg-[#d9dae2]  text-black flex-1 rounded-md"
+              className=" shadow-[#0e0f14] shadow-xl sm:ml-3 py-1 px-3 bg-[#d9dae2]  text-black flex-1 rounded-md"
               type={passwordIsVisible ? "text" : "password"}
               id="password"
-              required
               value={password}
               onChange={handleChangePassword}
             />
@@ -122,6 +122,18 @@ export default function Login() {
           >
             Se connecter
           </button>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </div>
       </form>
     </section>

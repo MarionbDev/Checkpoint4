@@ -27,8 +27,7 @@ const read = (req, res) => {
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
-        // console.log(req.method); // Renvoie POST // Controllers qui sert aussi pour un POST
-        res.status(req.method === "POST" ? 201 : 200).send(rows[0]); // Status par défault 200 donc s'il y a un POST renvoie 201(created)
+        res.status(req.method === "POST" ? 201 : 200).send(rows[0]);
       }
     })
     .catch((err) => {
@@ -71,9 +70,6 @@ const add = (req, res, next) => {
   models.user
     .insert(user)
     .then(([result]) => {
-      // res.location(`/users/${result.insertId}`).sendStatus(201);
-      // insertion de donné admin réussi j'ajoute à la req ds les param de l'url j'ajoute cet Id pour renvoyer un statut(201) :
-      // res.status(201).json({ id: result.insertId });
       req.params.id = result.insertId;
       next();
     })

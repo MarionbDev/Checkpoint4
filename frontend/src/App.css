@@ -17,14 +17,26 @@ body {
 /* GRID AREA */
 .parent {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  grid-column-gap: 20px;
+  grid-column-gap: 32px;
   grid-row-gap: 28px;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (min-width: 768px) {
   .parent {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .parent {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .parent {
+    grid-template-columns: repeat(6, 1fr);
   }
 }

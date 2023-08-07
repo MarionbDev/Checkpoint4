@@ -1,6 +1,3 @@
-// import { Tooltip } from "react-tooltip";
-// import { useUserContext } from "../contexts/UserContext";
-
 import PropTypes from "prop-types";
 
 export default function Drawing({ info }) {
