@@ -8,8 +8,8 @@ export const userCreationSchema = object({
     "Un nom est requis"
   ),
   mail: string("Vous devez renseigner un email")
-    .email()
-    .required("Un email est requis"),
+    .email("Un email valide est requis")
+    .required(),
   password: string("Vous devez renseigner un mot de passe").required(
     "Un mot de passe est requis"
   ),

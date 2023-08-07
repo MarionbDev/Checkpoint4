@@ -33,7 +33,6 @@ export default function GetAllUser() {
   }, []);
 
   const deleteUser = () => {
-    // if (confirm("Voulez-vous supprimer cette intervention ?")) {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${selectedUserId}`, {
       method: "DELETE",
       credentials: "include",
@@ -43,7 +42,6 @@ export default function GetAllUser() {
         deleteOnCloseModal();
       })
       .catch((err) => console.error(err));
-    // }
   };
 
   if (!user) {

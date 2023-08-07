@@ -53,7 +53,7 @@ export default function Gallery() {
           )
           .map((item) => (
             <div
-              className=" h-[23rem] flex flex-col justify-between rounded-md shadow-lg shadow-[#a4aac1] bg-[#e0e5fb] hover:scale-105 duration-300 p-2  "
+              className=" h-[16rem] flex flex-col justify-between rounded-md shadow-lg shadow-[#a4aac1] bg-[#e0e5fb] hover:scale-110 duration-500 p-2  "
               key={item.id}
             >
               <div className="">
@@ -64,7 +64,7 @@ export default function Gallery() {
                         item.image
                       }`}
                       alt="Drawing"
-                      className=" h-[19rem] object-cover border-4 border-black  "
+                      className=" h-[12rem] object-cover border-4 border-black  "
                     />
                   </div>
                 </Link>

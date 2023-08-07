@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { useUserContext } from "../contexts/UserContext";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
@@ -24,7 +26,7 @@ export default function Login() {
     e.preventDefault();
 
     if (!email || !password) {
-      alert("You must provide an email and a password !");
+      toast.warning("Veuillez renseigner un email et un mot de passe !");
     } else {
       fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/login`, {
         method: "POST",
@@ -40,11 +42,11 @@ export default function Login() {
         .then((data) => {
           console.warn(data);
           dispatch({ type: "SET_USER", payload: data });
-          navigate(`/gallery`); // !!!! CHANGEMENT ROUTE T'EN QUE ID NULL
+          navigate(`/gallery`);
         })
         .catch((error) => {
           console.error("Error:", error);
-          alert("Error to login, please try again!!!");
+          toast.error("Erreur de connexion, veuillez rééssayer !!!");
         });
     }
   };
@@ -65,7 +67,6 @@ export default function Login() {
               className="shadow-[#0e0f14] shadow-xl sm:ml-3 py-1 px-3 text-black flex-1 bg-[#d9dae2] rounded-md"
               type="email"
               id="email"
-              required
               value={email}
               onChange={handleChangeEmail}
             />
@@ -81,7 +82,6 @@ export default function Login() {
               className=" shadow-[#0e0f14] shadow-xl sm:ml-3 py-1 px-3 bg-[#d9dae2]  text-black flex-1 rounded-md"
               type={passwordIsVisible ? "text" : "password"}
               id="password"
-              required
               value={password}
               onChange={handleChangePassword}
             />
@@ -122,6 +122,18 @@ export default function Login() {
           >
             Se connecter
           </button>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </div>
       </form>
     </section>

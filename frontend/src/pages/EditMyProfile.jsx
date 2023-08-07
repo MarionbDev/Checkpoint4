@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { useUserContext } from "../contexts/UserContext";
 import { userUpdateSchema } from "../schemas/userSchemas";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function EditMyProfile() {
   const [userProf, setUserProf] = useState([]);
@@ -14,6 +16,19 @@ export default function EditMyProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [{ user }, dispatch] = useUserContext();
+
+  const notify = () => {
+    toast.success("Profile mis à jour !", {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
 
   const getOneUser = () => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
@@ -64,8 +79,6 @@ export default function EditMyProfile() {
         { abortEarly: false }
       )
       .then(() => {
-        // Le reste de votre code ici
-
         fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
           method: "PUT",
           credentials: "include",
@@ -75,16 +88,17 @@ export default function EditMyProfile() {
           body: JSON.stringify(updateUser),
         })
           .then(() => {
-            // console.log("User updated successfully:", data);
             dispatch({ type: "UPDATE_USER", payload: updateUser });
-            navigate("/my-profile");
+            notify();
+            setTimeout(() => {
+              navigate("/my-profile");
+            }, 3000);
           })
           .catch((error) => {
             console.error("Error updating user:", error);
           });
       })
       .catch((err) => {
-        // La validation a échoué, traitez les erreurs ici
         const drawingErrors = err.inner.reduce((acc, error) => {
           return {
             ...acc,
@@ -194,6 +208,18 @@ export default function EditMyProfile() {
               >
                 Sauvegarder
               </button>
+              <ToastContainer
+                position="bottom-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
             </div>
           </form>
         </div>

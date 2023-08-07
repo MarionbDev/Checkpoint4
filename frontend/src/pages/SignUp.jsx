@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { userCreationSchema } from "../schemas/userSchemas";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignUp() {
   const [firstname, setFirstname] = useState("");
@@ -39,8 +41,9 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    userCreationSchema
-      .validate(
+    try {
+      // Validate the data using your Yup schema
+      userCreationSchema.validateSync(
         {
           firstname,
           lastname,
@@ -50,43 +53,56 @@ export default function SignUp() {
           pseudo,
         },
         { abortEarly: false }
-      )
-      .then(() => {
-        // Le reste de votre code ici
+      );
 
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstname,
-            lastname,
-            mail,
-            password,
-            about,
-            pseudo,
-          }),
-        })
-          .then((res) => res.json())
-          .then(() => {
-            navigate(`/login`);
-          })
-          .catch(() => {
-            alert("Error to create your account, please try again!!!");
-          });
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          mail,
+          password,
+          about,
+          pseudo,
+        }),
       })
-      .catch((err) => {
-        // La validation a échoué, traitez les erreurs ici
-        const drawingErrors = err.inner.reduce((acc, error) => {
-          return {
-            ...acc,
-            [error.path]: { hasError: true, message: error.message },
-          };
-        }, {});
-        console.error("Error Yup :", drawingErrors);
-      });
+        .then((res) => res.json())
+        .then(() => {
+          toast.success("Votre compte a été créé avec succès !");
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error("Error à la création du compte, veuillez rééssayer !!!");
+        });
+    } catch (error) {
+      const validationErrors = error.inner.reduce((acc, validationError) => {
+        return {
+          ...acc,
+          [validationError.path]: validationError.message,
+        };
+      }, {});
+
+      console.error("Validation errors:", validationErrors);
+
+      if (validationErrors.firstname) {
+        toast.error(validationErrors.firstname);
+      }
+      if (validationErrors.lastname) {
+        toast.error(validationErrors.lastname);
+      }
+      if (validationErrors.mail) {
+        toast.error(validationErrors.mail);
+      }
+      if (validationErrors.password) {
+        toast.error(validationErrors.password);
+      }
+    }
   };
 
   return (
@@ -105,7 +121,6 @@ export default function SignUp() {
               type="text"
               id="pseudo"
               value={pseudo}
-              required
               onChange={handleChangePseudo}
             />
           </div>
@@ -119,7 +134,6 @@ export default function SignUp() {
               type="text"
               id="firstname"
               value={firstname}
-              required
               onChange={handleChangeFirstname}
             />
             <label htmlFor="lastname" className=" flex items-center">
@@ -130,7 +144,6 @@ export default function SignUp() {
               type="text"
               id="lastname"
               value={lastname}
-              required
               onChange={handleChangeLastname}
             />
           </div>
@@ -145,7 +158,6 @@ export default function SignUp() {
               type="text"
               id="about"
               value={about}
-              required
               onChange={handleChangeAbout}
             />
           </div>
@@ -158,7 +170,6 @@ export default function SignUp() {
               type="mail"
               id="mail"
               value={mail}
-              required
               onChange={handleChangeEmail}
             />
             <label htmlFor="password" className=" flex items-center">
@@ -169,7 +180,6 @@ export default function SignUp() {
               type="password"
               id="password"
               value={password}
-              required
               onChange={handleChangePassword}
             />
           </div>
@@ -181,6 +191,18 @@ export default function SignUp() {
           >
             <p className="text-sm">Finaliser votre inscription</p>
           </button>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={1500}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </div>
         <p className="italic text-xs">* Mentions obligatoire</p>
       </form>

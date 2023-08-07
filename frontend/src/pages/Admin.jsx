@@ -1,5 +1,7 @@
 import AdminCreateDrawing from "../components/AdminCreateDrawing";
+
 import GetAllUser from "../components/AllUser";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Admin() {
   return (

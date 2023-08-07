@@ -4,7 +4,6 @@ import "./App.css";
 import "react-responsive-modal/styles.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./modalStyles.css";
-
 import SignUp from "./pages/SignUp";
 import Gallery from "./pages/Gallery";
 import MyProfile from "./pages/MyProfile";
@@ -26,6 +25,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Connection />} />
         <Route path="/faq" element={<FAQ />} />
+        {/* <Route path="/change-password" element={<ChangePassword />} /> */}
 
         <Route
           path="/"
@@ -34,8 +34,8 @@ function App() {
           <Route path="gallery" element={<Gallery />} />
           <Route path="/gallery/:id" element={<DrawingDetails />} />
           <Route path="my-profile" element={<MyProfile />} />
+          <Route path="change-password/:id" element={<ChangePassword />} />
           <Route path="edit-profile/:id" element={<EditMyProfile />} />
-          <Route path="change-password" element={<ChangePassword />} />
           <Route path="logout" element={<Logout />} />
         </Route>
 

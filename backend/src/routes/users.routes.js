@@ -8,7 +8,7 @@ router.get("/", userControllers.browse);
 router.get("/:id", userControllers.read);
 router.get("/:id/drawings", drawingControllers.allCreation);
 
-router.put("/:id", userControllers.edit);
+router.put("/:id", userControllers.hashPassword, userControllers.edit);
 
 router.post(
   "/",
@@ -16,9 +16,9 @@ router.post(
   userControllers.add,
   userControllers.read
 );
+
 router.post("/login", userControllers.login, authControllers.createToken);
 
-// Seul l'admin peut supprimer un compte user
 router.delete(
   "/:id",
   authControllers.verifyToken,

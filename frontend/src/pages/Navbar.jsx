@@ -4,12 +4,11 @@ import * as AiIcons from "react-icons/ai";
 import * as BsIcons from "react-icons/bs";
 import * as MdIcons from "react-icons/md";
 import * as GoIcons from "react-icons/go";
-
 import { useUserContext } from "../contexts/UserContext";
 import PrivateLink from "../components/PrivateLink";
 import Logout from "../components/Logout";
 import Contact from "./Contact";
-import "../components/Navbar.css";
+import "./css/Navbar.css";
 import Header from "../components/Header";
 
 export default function Navbar() {

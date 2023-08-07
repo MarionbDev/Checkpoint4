@@ -222,17 +222,21 @@ export default function DrawingDetails() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex justify-center items-center p-3  w-8 h-8 rounded-full hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white  duration-200">
-                          {user.role === "admin" && (
-                            <button
-                              type="button"
-                              onClick={() => handleDelete(item.id)}
-                            >
-                              <p>
-                                <BsIcons.BsTrash />
-                              </p>
-                            </button>
-                          )}
+                        <div>
+                          {user.role === "admin" || user.id === item.user_id ? (
+                            <div>
+                              <div className="flex justify-center items-center p-3  w-8 h-8 rounded-full hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white  duration-200">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDelete(item.id)}
+                                >
+                                  <p>
+                                    <BsIcons.BsTrash />
+                                  </p>
+                                </button>
+                              </div>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </div>

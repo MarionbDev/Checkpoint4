@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import drawingCreationSchema from "../schemas/drawingSchemas";
-// import {drawingCreationSchema} from "../schemas/drawingSchemas"
 
 const imageTypes = ["image/jpeg", "image/jpg", "image/png"];
 
@@ -27,12 +27,17 @@ export default function AdminCreateDrawing() {
     if (imageTypes.includes(fileSelected.type)) {
       setImage(e.target.files[0]);
     } else {
-      alert("Seulement les formats jpeg, jpg et png sont autorisés");
+      toast.warning("Seulement les formats jpeg, jpg et png sont autorisés");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!title || !image) {
+      toast.error("Un titre et une image sont obligatoires !");
+      return;
+    }
 
     drawingCreationSchema
       .validate(
@@ -58,9 +63,11 @@ export default function AdminCreateDrawing() {
         })
           .then((res) => res.json())
           .then(() => {
-            // Le dessin a été enregistré avec succès
-            // alert("Le dessin a été créé avec succès !");
-            navigate(`/gallery`);
+            toast.success("Le dessin a été créé avec succès !");
+            setTimeout(() => {
+              navigate("/gallery");
+            }, 3000);
+
             setTitle("");
             setDescription("");
             setImage("");
@@ -70,7 +77,7 @@ export default function AdminCreateDrawing() {
           })
           .catch((err) => {
             console.error(err);
-            alert("Erreur à la création, essayez encore !!");
+            toast.error("Erreur à la création, essayez encore !!");
           });
       })
       .catch((err) => {
@@ -102,7 +109,6 @@ export default function AdminCreateDrawing() {
                     className=" bg-[#e2e4eb] hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4]0 rounded-md ml-2 w-full p-2 duration-300"
                     type="text"
                     id="title"
-                    required
                     value={title}
                     onChange={handleChangeTitle}
                   />
@@ -124,7 +130,6 @@ export default function AdminCreateDrawing() {
                   className=" bg-slate-200 p-[5px] ml-2 hover:text-white hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4] w-48 sm:w-auto duration-300"
                   type="file"
                   id="image"
-                  required
                   onChange={handleChangeImage}
                   ref={fileInputRef}
                 />
@@ -133,10 +138,22 @@ export default function AdminCreateDrawing() {
             <div className="flex justify-center items-center mt-6 sm:mt-8">
               <button
                 type="submit"
-                className="hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] py-3 px-4 rounded-full duration-300 text-[#FFFFFF]"
+                className="hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] py-3 px-8 rounded-full duration-300 text-[#FFFFFF]"
               >
                 Enregistrer
               </button>
+              <ToastContainer
+                position="bottom-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
             </div>
           </div>
         </form>
