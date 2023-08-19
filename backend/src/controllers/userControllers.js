@@ -117,23 +117,17 @@ const hashPassword = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-  // console.log("Request Body:", req.body);
   const { email, password } = req.body;
-  // console.log("Email:", email);
-  // console.log("Password:", password);
-  // une 1ère sécurité mais pas suffisante (=> ajouter un token)
   models.user
     .findByEmail(email)
     .then(([users]) => {
       if (users.length === 0) {
         res.sendStatus(404);
-        // si password est différent argon2 renverra false, permet de renvoyer un 404
       } else if (!argon2.verifySync(users[0].hashedPassword, password)) {
         res.sendStatus(404);
       } else {
         const user = { ...users[0] };
         delete user.hashedPassword;
-
         req.body = user;
         next();
       }

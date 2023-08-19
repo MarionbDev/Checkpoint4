@@ -6,7 +6,6 @@ import { userUpdateSchema } from "../schemas/userSchemas";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function EditMyProfile() {
-  const [userProf, setUserProf] = useState([]);
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
   const [pseudo, setPseudo] = useState("");
@@ -16,6 +15,22 @@ export default function EditMyProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [{ user }, dispatch] = useUserContext();
+
+  const getOneUser = () => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
+      credentials: "include",
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        // console.log("getOneUser :", data);
+        setLastname(data.lastname);
+        setFirstname(data.firstname);
+        setPseudo(data.pseudo);
+        setAbout(data.about);
+        setMail(data.mail);
+      })
+      .catch((err) => console.error(err));
+  };
 
   const notify = () => {
     toast.success("Profile mis à jour !", {
@@ -30,33 +45,7 @@ export default function EditMyProfile() {
     });
   };
 
-  const getOneUser = () => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
-      credentials: "include",
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setUserProf(data);
-        setLastname(data.lastname);
-        setFirstname(data.firstname);
-        setPseudo(data.pseudo);
-        setAbout(data.about);
-        setMail(data.mail);
-      })
-      .catch((err) => console.error(err));
-  };
-
-  useEffect(() => {
-    if (user) {
-      setLastname(user.lastname);
-      setFirstname(user.firstname);
-      setPseudo(user.pseudo);
-      setAbout(user.about);
-      setMail(user.mail);
-    }
-  }, [user]);
-
-  const handleHupdateUser = (e) => {
+  const handleUpdateUser = (e) => {
     e.preventDefault();
 
     const updateUser = {
@@ -66,7 +55,6 @@ export default function EditMyProfile() {
       about,
       mail,
     };
-
     userUpdateSchema
       .validate(
         {
@@ -99,13 +87,13 @@ export default function EditMyProfile() {
           });
       })
       .catch((err) => {
-        const drawingErrors = err.inner.reduce((acc, error) => {
+        const userErrors = err.inner.reduce((acc, error) => {
           return {
             ...acc,
             [error.path]: { hasError: true, message: error.message },
           };
         }, {});
-        console.error("Error Yup :", drawingErrors);
+        console.error("Error Yup :", userErrors);
       });
   };
 
@@ -113,7 +101,18 @@ export default function EditMyProfile() {
     getOneUser();
   }, [id]);
 
-  if (!userProf) {
+  useEffect(() => {
+    if (user) {
+      // console.log("Setting user data from context:", user);
+      setLastname(user.lastname);
+      setFirstname(user.firstname);
+      setPseudo(user.pseudo);
+      setAbout(user.about);
+      setMail(user.mail);
+    }
+  }, [user]);
+
+  if (!user) {
     return (
       <p className="text-white flex justify-center mt-96">
         Chargement du compte en cours...
@@ -204,7 +203,7 @@ export default function EditMyProfile() {
               <button
                 className="hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] py-2 px-3 rounded-full duration-300"
                 type="submit"
-                onClick={handleHupdateUser}
+                onClick={handleUpdateUser}
               >
                 Sauvegarder
               </button>
