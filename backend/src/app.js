@@ -13,7 +13,7 @@ const app = express();
 
 app.use(express.json());
 
-// Permet l'accès au cookie et les lire
+// access Cookie
 const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());

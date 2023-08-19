@@ -9,7 +9,7 @@ export const userCreationSchema = object({
   ),
   mail: string("Vous devez renseigner un email")
     .email("Un email valide est requis")
-    .required(),
+    .required("Un email valide est requis"),
   password: string("Vous devez renseigner un mot de passe").required(
     "Un mot de passe est requis"
   ),

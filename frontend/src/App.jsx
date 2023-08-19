@@ -3,7 +3,7 @@ import PrivateRoutes from "./components/PrivateRoutes";
 import "./App.css";
 import "react-responsive-modal/styles.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import "./modalStyles.css";
+import "./pages/css/modalStyles.css";
 import SignUp from "./pages/SignUp";
 import Gallery from "./pages/Gallery";
 import MyProfile from "./pages/MyProfile";
@@ -25,7 +25,6 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Connection />} />
         <Route path="/faq" element={<FAQ />} />
-        {/* <Route path="/change-password" element={<ChangePassword />} /> */}
 
         <Route
           path="/"

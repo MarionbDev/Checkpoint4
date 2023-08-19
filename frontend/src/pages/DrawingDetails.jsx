@@ -4,7 +4,9 @@ import { Modal } from "react-responsive-modal";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 import { format } from "date-fns";
+import { ToastContainer, toast } from "react-toastify";
 import { useUserContext } from "../contexts/UserContext";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function DrawingDetails() {
   const navigate = useNavigate();
@@ -13,10 +15,24 @@ export default function DrawingDetails() {
   const [userList, setUsersList] = useState([]);
   const [commentList, setCommentList] = useState([]);
   const [selectedComment, setSelectedComment] = useState(null);
-
   const [selectedDrawingId, setSelectedDrawingId] = useState(null);
-
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const [{ user }] = useUserContext();
+  const { id } = useParams();
+
+  // const notify = () => {
+  //   toast.success("Profile mis à jour !", {
+  //     position: "bottom-right",
+  //     autoClose: 2000,
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //     progress: undefined,
+  //     theme: "light",
+  //   });
+  // };
 
   const deleteOnCloseModal = () => setDeleteOpen(false);
 
@@ -28,9 +44,6 @@ export default function DrawingDetails() {
     setSelectedDrawingId(userId);
     setDeleteOpen(true);
   };
-
-  const [{ user }] = useUserContext();
-  const { id } = useParams();
 
   const getUsersList = () => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/`)
@@ -72,32 +85,36 @@ export default function DrawingDetails() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const currentDate = new Date();
-    const formattedDate = currentDate
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
+    if (user.pseudo) {
+      const currentDate = new Date();
+      const formattedDate = currentDate
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
 
-    const data = {
-      comment: newComment,
-      dateTime: formattedDate,
-      userId: user.id,
-      drawingId: drawing.id,
-    };
+      const data = {
+        comment: newComment,
+        dateTime: formattedDate,
+        userId: user.id,
+        drawingId: drawing.id,
+      };
 
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/comments/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setNewComment("");
-        getComment();
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/comments/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       })
-      .catch((err) => console.error(err));
+        .then((res) => res.json())
+        .then(() => {
+          setNewComment("");
+          getComment();
+        })
+        .catch((err) => console.error(err));
+    } else {
+      toast.error("Vous devez avoir un pseudo pour poster un commentaire.");
+    }
   };
 
   const deleteComment = () => {
@@ -167,7 +184,7 @@ export default function DrawingDetails() {
               drawing.image
             }`}
             alt="Drawing"
-            className=" border-8 border-black  "
+            className=" border-8 border-black max-h-[37rem]"
           />
           <div className="flex items-center gap-5  mt-4  ">
             <div className=" flex flex-col">
@@ -200,43 +217,47 @@ export default function DrawingDetails() {
                   const commentUser = userList.find(
                     (userItem) => userItem.id === item.user_id
                   );
-
                   return (
-                    <div>
-                      <div
-                        className={`flex justify-between ${
-                          index % 2 === 0
-                            ? "bg-[#939cc4] text-[#191f3f] "
-                            : "bg-white text-[#1b265d]"
-                        }  rounded-md mb-1 p-1 `}
-                      >
-                        <div className="flex flex-col">
-                          <p className=" text-base">{commentUser.pseudo} : </p>
+                    <div key={item.id}>
+                      <div>
+                        <div
+                          className={`flex justify-between ${
+                            index % 2 === 0
+                              ? "bg-[#939cc4] text-[#191f3f] "
+                              : "bg-white text-[#1b265d]"
+                          }  rounded-md mb-1 p-1 `}
+                        >
                           <div className="flex flex-col">
-                            <p className=" text-base mx-1 ">{item.comment}</p>
-                            <p className="italic text-xs">
-                              {format(
-                                new Date(item.dateTime),
-                                "dd-MM-yyyy HH:mm"
-                              )}
+                            <p className=" text-base">
+                              {commentUser.pseudo} :{" "}
                             </p>
-                          </div>
-                        </div>
-                        <div>
-                          {user.role === "admin" || user.id === item.user_id ? (
-                            <div>
-                              <div className="flex justify-center items-center p-3  w-8 h-8 rounded-full hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white  duration-200">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDelete(item.id)}
-                                >
-                                  <p>
-                                    <BsIcons.BsTrash />
-                                  </p>
-                                </button>
-                              </div>
+                            <div className="flex flex-col">
+                              <p className=" text-base mx-1 ">{item.comment}</p>
+                              <p className="italic text-xs">
+                                {format(
+                                  new Date(item.dateTime),
+                                  "dd-MM-yyyy HH:mm"
+                                )}
+                              </p>
                             </div>
-                          ) : null}
+                          </div>
+                          <div>
+                            {user.role === "admin" ||
+                            user.id === item.user_id ? (
+                              <div>
+                                <div className="flex justify-center items-center p-3  w-8 h-8 rounded-full hover:bg-[#a1aee0] hover:shadow-md hover:shadow-[#4e557a] hover:text-white  duration-200">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDelete(item.id)}
+                                  >
+                                    <p>
+                                      <BsIcons.BsTrash />
+                                    </p>
+                                  </button>
+                                </div>
+                              </div>
+                            ) : null}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -249,7 +270,7 @@ export default function DrawingDetails() {
                 id="comment"
                 name="comment"
                 rows="1"
-                cols="55"
+                cols="50"
                 value={newComment}
                 onChange={handleChangeComment}
                 placeholder="Laissez un commentaire ! "
@@ -305,6 +326,18 @@ export default function DrawingDetails() {
           </button>
         </div>
       </Modal>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

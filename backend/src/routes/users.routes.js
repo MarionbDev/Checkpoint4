@@ -8,7 +8,12 @@ router.get("/", userControllers.browse);
 router.get("/:id", userControllers.read);
 router.get("/:id/drawings", drawingControllers.allCreation);
 
-router.put("/:id", userControllers.hashPassword, userControllers.edit);
+router.put("/:id", userControllers.edit);
+router.put(
+  "/:id/change-password",
+  userControllers.hashPassword,
+  userControllers.edit
+);
 
 router.post(
   "/",

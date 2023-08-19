@@ -13,7 +13,6 @@ export default function Gallery() {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/drawings/`)
       .then((resp) => resp.json())
       .then((data) => {
-        // console.log("data from server:", data);
         setDrawList(data);
       })
       .catch((error) => console.error(error));
@@ -40,7 +39,7 @@ export default function Gallery() {
           <input
             className=" bg-[#e2e4eb] hover:bg-[#a6b2e4] shadow-md shadow-[#a1aee0] hover:border-2- hover:border-[#8899e4] rounded-md ml-2 w-full pl-7 p-2 h-8 italic text-sm duration-300 "
             type="text"
-            placeholder="Dessin recherché "
+            placeholder="Mots clés "
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>

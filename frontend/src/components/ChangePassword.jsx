@@ -35,20 +35,22 @@ export default function ChangePassword() {
     event.preventDefault();
 
     if (newPassword === confirmNewPassword) {
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${id}`, {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          password: newPassword,
-        }),
-      })
+      fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${id}/change-password`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            password: newPassword,
+          }),
+        }
+      )
         .then((res) => {
           res.json();
         })
-
         .then(() => {
           console.warn("ok");
           notify();
