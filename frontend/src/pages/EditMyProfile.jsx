@@ -123,7 +123,7 @@ export default function EditMyProfile() {
   return (
     <div className="">
       <div className="flex justify-between border-b-2 border-[#282e4d] mx-10 pt-28">
-        <p className="text-xl sm:text-3xl  ml-2 ">Mettre à jour mon profil</p>
+        <p className="text-xl sm:text-3xl  ml-2 ">Mettre à jour mon profile</p>
       </div>
       <section className="flex justify-center sm:mt-8 mb-8">
         <div className="text-white rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] xl:w-3/6 m-8 sm:m-0  ">

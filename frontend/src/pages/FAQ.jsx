@@ -53,7 +53,7 @@ export default function FAQ() {
           onClick={() => toggleContent(2)}
           className="shadow-md shadow-[#4e557a] border-[#4e557a] border-2  focus:outline-none p-4 rounded-md mb-4  w-[70vw]"
         >
-          <h1 className="font-semibold mb-2">Tu es enfin connecté ?!</h1>
+          <h1 className="font-semibold mb-2">Tu es connecté ?</h1>
           <div className={`${activeIndex === 2 ? "block" : "hidden"} mb-2 `}>
             <h3>
               Maintenant, tu as un accès à la fiche personnelle de chacune des

@@ -31,7 +31,7 @@ export default function Gallery() {
   }
 
   return (
-    <div className="flex flex-col  min-w-min  ">
+    <div className="flex flex-col  min-w-min min-h-screen ">
       <div className="flex justify-between  pt-28 border-b-2 border-[#282e4d] ml-2 mb-5 mx-6 ">
         <p className=" text-2xl sm:text-5xl ml-2">GALERIE</p>
         <div className="flex mb-2 ">

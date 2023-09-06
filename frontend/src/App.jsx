@@ -15,16 +15,19 @@ import ChangePassword from "./components/ChangePassword";
 import Admin from "./pages/Admin";
 import DrawingDetails from "./pages/DrawingDetails";
 import FAQ from "./pages/FAQ";
+import Footer from "./components/Footer";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 function App() {
   return (
-    <div>
+    <div className="flex flex-col min-w-min">
       <Navbar />
       <Routes>
         <Route path="/" element={<Gallery />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Connection />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
         <Route
           path="/"
@@ -45,6 +48,7 @@ function App() {
           <Route index element={<Admin />} />
         </Route>
       </Routes>
+      <Footer />
     </div>
   );
 }
