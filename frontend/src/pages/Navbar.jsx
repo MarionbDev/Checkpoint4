@@ -8,9 +8,9 @@ import { useUserContext } from "../contexts/UserContext";
 import PrivateLink from "../components/PrivateLink";
 import Logout from "../components/Logout";
 import Contact from "./Contact";
-import "./css/navbar.css";
 import Header from "../components/Header";
-// commit pout new pull request
+import "./css/navbar.css";
+
 export default function Navbar() {
   const [sidebar, setSidebar] = useState(false);
 

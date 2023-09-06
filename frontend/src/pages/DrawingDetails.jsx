@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Modal } from "react-responsive-modal";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
@@ -20,19 +20,6 @@ export default function DrawingDetails() {
 
   const [{ user }] = useUserContext();
   const { id } = useParams();
-
-  // const notify = () => {
-  //   toast.success("Profile mis à jour !", {
-  //     position: "bottom-right",
-  //     autoClose: 2000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined,
-  //     theme: "light",
-  //   });
-  // };
 
   const deleteOnCloseModal = () => setDeleteOpen(false);
 
@@ -173,8 +160,11 @@ export default function DrawingDetails() {
   }
 
   return (
-    <div className="mt-24">
-      <div className="md:grid md:grid-cols-2 mx-4 ">
+    <div className="mt-20">
+      <Link to="/gallery">
+        <BsIcons.BsArrowLeftCircle className="absolute mt-3  ml-3 w-7 h-7" />
+      </Link>
+      <div className="md:grid md:grid-cols-2 mx-4 mt-7">
         <div
           key={`details-${drawing.id}`}
           className="flex flex-col items-center my-5 mx-4 "
@@ -186,8 +176,8 @@ export default function DrawingDetails() {
             alt="Drawing"
             className=" border-8 border-black max-h-[37rem]"
           />
-          <div className="flex items-center gap-5  mt-4  ">
-            <div className=" flex flex-col">
+          <div className="flex items-center gap-5  mt-2 ">
+            <div className=" flex flex-col items-center">
               <p className="text-sm sm:text-lg"> {drawing.title}</p>
               <p className="text-sm sm:text-md"> {drawing.description}</p>
             </div>
