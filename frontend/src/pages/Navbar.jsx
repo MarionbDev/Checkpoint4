@@ -19,8 +19,8 @@ export default function Navbar() {
   const [{ user }] = useUserContext();
 
   return (
-    <>
-      <div className="navbar text-white fixed w-full z-50 top-0  ">
+    <div>
+      <div className="navbar text-white fixed w-full z-50 top-0   ">
         <button type="button" className="menu-bars">
           <AiIcons.AiOutlineMenu onClick={showSidebar} />
         </button>
@@ -35,7 +35,7 @@ export default function Navbar() {
       </div>
       <div className="text-white  ">
         {user ? (
-          <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
+          <nav className={sidebar ? "nav-menu active " : "nav-menu"}>
             <button
               type="button"
               className="nav-menu-items"
@@ -46,7 +46,7 @@ export default function Navbar() {
                   <AiIcons.AiOutlineClose />
                 </button>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col ">
                 <div className="flex flex-col h-[20rem] mb-10">
                   <li className=" nav-text ">
                     <Link to="gallery">
@@ -190,6 +190,6 @@ export default function Navbar() {
           </nav>
         )}
       </div>
-    </>
+    </div>
   );
 }

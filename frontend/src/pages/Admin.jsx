@@ -10,7 +10,7 @@ export default function Admin() {
         <p className="text-lg md:text-3xl sm:ml-2 ">Gestion des membres</p>
       </div>
       <div className="flex justify-center">
-        <div className=" flex flex-col gap-3 text-white  md:w-5/6 rounded-lg shadow-xl shadow-[#a4aac1] bg-[#4e557a] sm:m-8 ">
+        <div className=" flex flex-col gap-3 text-white  xl:w-3/6 rounded-lg shadow-xl shadow-[#a4aac1] bg-[#4e557a] sm:m-8 ">
           <p className=" font-semibold p-2 sm:pl-4 border-b-2 mx-2 sm:mx-4 border-[#3e466a] ">
             Liste des membres :
           </p>

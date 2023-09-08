@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { changePasswordSchema } from "../schemas/changePasswordSchemas";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ChangePassword() {
@@ -37,39 +38,66 @@ export default function ChangePassword() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (newPassword === confirmNewPassword) {
-      fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/${id}/change-password`,
+    try {
+      // Validate the data using Yup schema
+      changePasswordSchema.validateSync(
         {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            password: newPassword,
-          }),
-        }
-      )
-        .then((res) => {
-          res.json();
-        })
-        .then(() => {
-          console.warn("ok");
-          notify();
-          setTimeout(() => {
-            navigate("/my-profile");
-          }, 3000);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else {
-      toast.error(
-        "Attention : confirmation du nouveau mot de passe non valide !"
+          newPassword,
+          confirmNewPassword,
+        },
+        { abortEarly: false }
       );
-      setNewPassword("");
-      setConfirmNewPassword("");
+
+      if (newPassword === confirmNewPassword) {
+        fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/${id}/change-password`,
+          {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              password: newPassword,
+            }),
+          }
+        )
+          .then((res) => {
+            res.json();
+          })
+          .then(() => {
+            console.warn("ok");
+            notify();
+            setTimeout(() => {
+              navigate("/my-profile");
+            }, 3000);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        toast.error(
+          "Attention : confirmation du nouveau mot de passe non valide !"
+        );
+        setNewPassword("");
+        setConfirmNewPassword("");
+      }
+    } catch (error) {
+      const validationErrors = error.inner.reduce((acc, validationError) => {
+        return {
+          ...acc,
+          [validationError.path]: validationError.message,
+        };
+      }, {});
+
+      console.error("Validation errors:", validationErrors);
+
+      if (validationErrors.newPassword) {
+        toast.warn(validationErrors.newPassword);
+      }
+      // if (validationErrors.confirmNewPassword) {
+      //   toast.error(validationErrors.confirmNewPassword);
+      // }
     }
   };
 
@@ -172,7 +200,7 @@ export default function ChangePassword() {
               </button>
             </div>
 
-            <div className="flex justify-center gap-6 ml-3s">
+            <div className="flex justify-center gap-6 ml-3">
               <button
                 type="submit"
                 onClick={handleSubmit}

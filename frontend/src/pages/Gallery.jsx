@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import * as BiIcons from "react-icons/bi";
 import { Link } from "react-router-dom";
+// import { ToastContainer, toast } from "react-toastify";
+
 import { useUserContext } from "../contexts/UserContext";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Gallery() {
   const [drawList, setDrawList] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
   const [{ user }] = useUserContext();
+
+  // const [isUserLoggedIn, setIsUserLoggedIn] = useState(!!user);
 
   const getDrawings = () => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/drawings/`)
@@ -18,13 +23,24 @@ export default function Gallery() {
       .catch((error) => console.error(error));
   };
 
+  // const handleDrawingClick = () => {
+  //   if (!isUserLoggedIn) {
+  //     console.log("User is not logged in.");
+  //     toast.warning("Veuillez vous connecter pour accéder au site");
+  //   }
+  // };
+
   useEffect(() => {
     getDrawings();
   }, [user]);
 
+  // useEffect(() => {
+  //   setIsUserLoggedIn(!!user);
+  // }, [user]);
+
   if (drawList.length === 0) {
     return (
-      <p className="text-slate-500 flex justify-center mt-56">
+      <p className="text-slate-500 flex justify-center mt-56 min-h-screen">
         Chargement en cours...
       </p>
     );
@@ -55,7 +71,7 @@ export default function Gallery() {
               className=" h-[16rem] flex flex-col justify-between rounded-md shadow-lg shadow-[#a4aac1] bg-[#e0e5fb] hover:scale-110 duration-500 p-2  "
               key={item.id}
             >
-              <div className="">
+              <div>
                 <Link to={`/gallery/${item.id}`}>
                   <div className="flex justify-center items-center py-1 mx-4 portrait-item ">
                     <img
@@ -73,6 +89,18 @@ export default function Gallery() {
               </div>
             </div>
           ))}
+        {/* <ToastContainer
+          position="bottom-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        /> */}
       </div>
     </div>
   );
