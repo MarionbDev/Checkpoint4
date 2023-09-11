@@ -1,3 +1,4 @@
+import "./Navbar.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import * as AiIcons from "react-icons/ai";
@@ -9,7 +10,6 @@ import PrivateLink from "../components/PrivateLink";
 import Logout from "../components/Logout";
 import Contact from "./Contact";
 import Header from "../components/Header";
-import "./css/navbar.css";
 
 export default function Navbar() {
   const [sidebar, setSidebar] = useState(false);
