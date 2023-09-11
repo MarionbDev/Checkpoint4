@@ -1,5 +1,6 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+const models = require("../models");
 
 const { JWT_SECRET, JWT_EXPIRESIN, JWT_SECURE, JWT_COOKIE_MAXAGE } =
   process.env;
@@ -58,4 +59,39 @@ const isAdmin = (req, res, next) => {
   }
 };
 
-module.exports = { createToken, verifyToken, isAdmin };
+const refreshToken = (req, res, next) => {
+  const token = req.cookies.jwtToken;
+
+  // Vérifier si un token JWT existe
+  if (!token) {
+    // console.log("Aucun token JWT trouvé.");
+    return res.sendStatus(401);
+  }
+
+  // Trouver l'utilisateur associé au token
+  models.user
+    .find(req.body.id)
+    .then(([rows]) => {
+      // console.log("Résultat de la recherche de l'utilisateur :", rows);
+
+      // Si aucun utilisateur n'est trouvé, renvoyer une réponse 401
+      if (rows[0] == null) {
+        // console.log("Utilisateur introuvable.");
+        return res.sendStatus(401);
+      }
+
+      // Si un utilisateur est trouvé, mettre à jour req.body avec les informations de l'utilisateur
+      const user = rows[0];
+      req.body = user;
+      next();
+      return null; // Ajout du return pour éviter l'erreur
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.sendStatus(500);
+    });
+
+  return null;
+};
+
+module.exports = { createToken, verifyToken, isAdmin, refreshToken };

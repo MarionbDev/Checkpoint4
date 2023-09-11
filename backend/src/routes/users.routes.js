@@ -5,7 +5,8 @@ const drawingControllers = require("../controllers/drawingControllers");
 const authControllers = require("../controllers/authControllers");
 
 router.get("/", userControllers.browse);
-router.get("/:id", userControllers.read);
+router.get("/:id", authControllers.verifyToken, userControllers.read);
+
 router.get("/:id/drawings", drawingControllers.allCreation);
 
 router.put("/:id", userControllers.edit);

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import * as BiIcons from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
 import { useUserContext } from "../contexts/UserContext";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Gallery() {
   const [drawList, setDrawList] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
   const [{ user }] = useUserContext();
+
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(!!user);
 
   const getDrawings = () => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/drawings/`)
@@ -18,13 +23,42 @@ export default function Gallery() {
       .catch((error) => console.error(error));
   };
 
+  // Prevents context menu from appearing (right-click)
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+  };
+
+  // Message to access the site
+  const notify = () => {
+    toast.info("Veuillez vous connecter pour accéder au site !", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  const handleDrawingClick = () => {
+    if (!isUserLoggedIn) {
+      notify();
+    }
+  };
+
   useEffect(() => {
     getDrawings();
   }, [user]);
 
+  useEffect(() => {
+    setIsUserLoggedIn(!!user);
+  }, [user]);
+
   if (drawList.length === 0) {
     return (
-      <p className="text-slate-500 flex justify-center mt-56">
+      <p className="text-slate-500 flex justify-center mt-56 min-h-screen">
         Chargement en cours...
       </p>
     );
@@ -44,7 +78,6 @@ export default function Gallery() {
           />
         </div>
       </div>
-
       <div className="px-6 parent mb-14">
         {drawList
           .filter((item) =>
@@ -54,26 +87,44 @@ export default function Gallery() {
             <div
               className=" h-[16rem] flex flex-col justify-between rounded-md shadow-lg shadow-[#a4aac1] bg-[#e0e5fb] hover:scale-110 duration-500 p-2  "
               key={item.id}
+              onContextMenu={handleContextMenu}
             >
-              <div className="">
-                <Link to={`/gallery/${item.id}`}>
+              <button type="button" onClick={handleDrawingClick}>
+                <Link
+                  to={`/gallery/${item.id}`}
+                  onClick={(e) => !isUserLoggedIn && e.preventDefault()}
+                >
                   <div className="flex justify-center items-center py-1 mx-4 portrait-item ">
+                    {" "}
                     <img
                       src={`${import.meta.env.VITE_ASSETS_URL}/drawings/${
                         item.image
                       }`}
                       alt="Drawing"
                       className=" h-[12rem] object-cover border-4 border-black  "
-                    />
+                    />{" "}
                   </div>
                 </Link>
-              </div>
+              </button>{" "}
               <div className="border-t-[#c6cad7] border-2 flex justify-center items-center ">
                 <p className="truncate">{item.title}</p>
               </div>
             </div>
           ))}
-      </div>
+      </div>{" "}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        className="mt-56"
+      />
     </div>
   );
 }

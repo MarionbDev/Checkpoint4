@@ -12,7 +12,7 @@ export default function FAQ() {
   };
 
   return (
-    <div className=" mt-32 flex flex-col items-center">
+    <div className=" mt-32 flex flex-col items-center min-h-screen">
       <h1 className="text-4xl mb-12 font-semibold text-[#4e557a]">FAQ</h1>
       <div className="flex ">
         <button
@@ -26,7 +26,7 @@ export default function FAQ() {
               Ce site me permet de partager mes réalisations avec un large
               public et de pouvoir interagir avec lui.
             </h3>
-            <p>Pour cela, connecte toi !!!</p>
+            <p>Pour cela, connectez-vous !!!</p>
           </div>
         </button>
       </div>
@@ -39,10 +39,10 @@ export default function FAQ() {
           <h1 className="font-semibold mb-2">Comment se connecter ?</h1>
           <div className={`${activeIndex === 1 ? "block" : "hidden"} mb-2 `}>
             <h3>
-              Pour commencer, crée un compte si ce n'est pas déjà fait. Remplis
-              toutes les données nécessaires. Ensuite, tu seras automatiquement
-              redirigé vers la page de connexion où tu devras saisir ton adresse
-              e-mail et ton mot de passe.
+              Pour commencer, créez un compte si ce n'est pas déjà fait en
+              remplissant toutes les données nécessaires. Ensuite, vous serez
+              automatiquement redirigé vers la page de connexion où vous devrez
+              saisir votre adresse e-mail et votre mot de passe.
             </h3>
           </div>
         </button>
@@ -53,13 +53,14 @@ export default function FAQ() {
           onClick={() => toggleContent(2)}
           className="shadow-md shadow-[#4e557a] border-[#4e557a] border-2  focus:outline-none p-4 rounded-md mb-4  w-[70vw]"
         >
-          <h1 className="font-semibold mb-2">Tu es connecté ?</h1>
+          <h1 className="font-semibold mb-2">Vous êtes connecté ?</h1>
           <div className={`${activeIndex === 2 ? "block" : "hidden"} mb-2 `}>
             <h3>
-              Maintenant, tu as un accès à la fiche personnelle de chacune des
-              réalisations. Tu pourras laisser un commentaire si tu le
-              souhaites. Tu pourras également mettre à jour ton profil. Tu
-              souhaites supprimer ton compte ? Contacte-moi !
+              À présent, vous avez accès à la fiche personnelle de chacune des
+              réalisations. Vous pouvez laisser un commentaire si vous le
+              souhaitez. Vous avez également la possibilité de mettre à jour
+              votre profil. Si vous souhaitez supprimer votre compte, veuillez
+              me contacter !
             </h3>
           </div>
         </button>
@@ -70,12 +71,12 @@ export default function FAQ() {
           onClick={() => toggleContent(3)}
           className="shadow-md shadow-[#4e557a] border-[#4e557a] border-2  focus:outline-none p-4 rounded-md mb-4 w-[70vw] "
         >
-          <h1 className="font-semibold mb-2">Tu souhaites me contacter ?</h1>
+          <h1 className="font-semibold mb-2">Vous souhaiter me contacter ?</h1>
           <div className={`${activeIndex === 3 ? "block" : "hidden"} mb-2 `}>
             <h3>
-              Tu as besoin de renseignements concernant une réalisation, ton
-              compte ou autre ? L'onglet 'Contact' te permettra de m'envoyer un
-              message directement à mon adresse e-mail
+              Avez-vous besoin d'informations concernant une réalisation, votre
+              compte ou autre ? L'onglet 'Contact' vous permettra de m'envoyer
+              un message directement à mon adresse e-mail.
             </h3>
           </div>
         </button>

@@ -156,11 +156,15 @@ export default function DrawingDetails() {
   }, [drawing]);
 
   if (!drawing) {
-    return <p className="mt-36 flex justify-center text-md">Loading</p>;
+    return (
+      <p className="mt-36 flex justify-center text-md min-h-screen">
+        Chargement de la page en cours ...
+      </p>
+    );
   }
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 min-h-screen">
       <Link to="/gallery">
         <BsIcons.BsArrowLeftCircle className="absolute mt-3  ml-3 w-7 h-7" />
       </Link>
@@ -196,6 +200,7 @@ export default function DrawingDetails() {
             </div>
           </div>
         </div>
+
         <div className="flex justify-center items-center  ">
           <div className="w-full sm:w-9/12 rounded-lg shadow-xl shadow-[#a4aac1] bg-[#939cc4] p-4">
             <p className="mb-2 ml-2 text-[#FFFFFF] font-semibold italic">
@@ -264,7 +269,7 @@ export default function DrawingDetails() {
                 value={newComment}
                 onChange={handleChangeComment}
                 placeholder="Laissez un commentaire ! "
-                className=" p-2 italic rounded-md text-sm "
+                className=" p-2 italic rounded-md text-sm w-full "
               />
               <button
                 type="button"

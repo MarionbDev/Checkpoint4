@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useUserContext } from "../contexts/UserContext";
 import { userUpdateSchema } from "../schemas/userSchemas";
@@ -103,7 +103,6 @@ export default function EditMyProfile() {
 
   useEffect(() => {
     if (user) {
-      // console.log("Setting user data from context:", user);
       setLastname(user.lastname);
       setFirstname(user.firstname);
       setPseudo(user.pseudo);
@@ -114,14 +113,14 @@ export default function EditMyProfile() {
 
   if (!user) {
     return (
-      <p className="text-white flex justify-center mt-96">
-        Chargement du compte en cours...
+      <p className="text-white flex justify-center mt-96 min-h-screen">
+        Chargement du profile en cours...
       </p>
     );
   }
 
   return (
-    <div className="">
+    <div className="min-h-screen">
       <div className="flex justify-between border-b-2 border-[#282e4d] mx-10 pt-28">
         <p className="text-xl sm:text-3xl  ml-2 ">Mettre à jour mon profile</p>
       </div>
@@ -199,14 +198,20 @@ export default function EditMyProfile() {
                 onChange={(e) => setAbout(e.target.value)}
               />
             </div>
-            <div className="flex justify-center mt-4 ">
+            <div className="flex justify-center gap-4 mt-4 ">
               <button
-                className="hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] py-2 px-3 rounded-full duration-300"
+                className="  hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] py-3 px-8 rounded-full text-center mt-6 duration-300"
                 type="submit"
                 onClick={handleUpdateUser}
               >
                 Sauvegarder
               </button>
+              <Link
+                to="/my-profile"
+                className="  hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] py-3 px-8 rounded-full text-center mt-6 duration-300"
+              >
+                Annuler
+              </Link>
               <ToastContainer
                 position="bottom-right"
                 autoClose={2000}

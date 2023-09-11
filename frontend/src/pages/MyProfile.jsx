@@ -6,18 +6,18 @@ export default function MyProfile() {
 
   if (!user) {
     return (
-      <p className=" text-slate-500 flex justify-center mt-56">
-        Chargement en cours...
+      <p className=" text-slate-500 flex justify-center mt-56 min-h-screen">
+        Chargement du profile en cours...
       </p>
     );
   }
 
   return (
-    <>
+    <div className=" min-h-screen">
       <div className="flex justify-between border-b-2 border-[#282e4d] mx-10 pt-28">
         <p className="text-xl sm:text-3xl  sm:ml-2 ">Gestion de mon profil</p>
       </div>
-      <div className="flex justify-center mb-8 mt-8 sm:mb-0 md:mt-20">
+      <div className="flex justify-center mb-8 mt-8 sm:mb-0 md:mt-20 ">
         <div className="flex flex-col justify-center text-white xl:w-3/6 p-8 mx-10 mb-8 xl:p-0 md:mx-36 xl:mx-48 xl:h-80 rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] ">
           <div className="flex flex-col lg:flex-row lg:justify-around md:gap-12 lg:gap-24 lg:mx-10 items-center lg:items-start">
             <div className="flex flex-col">
@@ -52,6 +52,6 @@ export default function MyProfile() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

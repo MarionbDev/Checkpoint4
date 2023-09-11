@@ -46,8 +46,8 @@ export default function GetAllUser() {
 
   if (!user) {
     return (
-      <p className="text-white flex justify-center mt-96">
-        Chargement des utilisateurs...
+      <p className="text-white flex justify-center mt-96 min-h-screen">
+        Chargement des utilisateurs en cours...
       </p>
     );
   }
