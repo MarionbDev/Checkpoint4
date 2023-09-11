@@ -95,9 +95,6 @@ export default function ChangePassword() {
       if (validationErrors.newPassword) {
         toast.warn(validationErrors.newPassword);
       }
-      // if (validationErrors.confirmNewPassword) {
-      //   toast.error(validationErrors.confirmNewPassword);
-      // }
     }
   };
 
@@ -130,7 +127,7 @@ export default function ChangePassword() {
                 onClick={() => setPasswordIsVisible(!passwordIsVisible)}
                 type="button"
               >
-                {!passwordIsVisible ? (
+                {passwordIsVisible ? (
                   <svg
                     className="absolute right-5 bottom-[8px] fill-black"
                     src="http://www.w3.org/2000/svg"
@@ -175,7 +172,7 @@ export default function ChangePassword() {
                 }
                 type="button"
               >
-                {!confirmPasswordIsVisible ? (
+                {confirmPasswordIsVisible ? (
                   <svg
                     className="absolute right-8 md:right-5 bottom-[8px] fill-black"
                     src="http://www.w3.org/2000/svg"
