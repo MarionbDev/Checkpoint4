@@ -33,7 +33,7 @@ export default function EditMyProfile() {
   };
 
   const notify = () => {
-    toast.success("Profile mis à jour !", {
+    toast.success("Profil mis à jour !", {
       position: "bottom-right",
       autoClose: 2000,
       hideProgressBar: false,
@@ -114,7 +114,7 @@ export default function EditMyProfile() {
   if (!user) {
     return (
       <p className="text-white flex justify-center mt-96 min-h-screen">
-        Chargement du profile en cours...
+        Chargement du profil en cours...
       </p>
     );
   }
@@ -122,7 +122,7 @@ export default function EditMyProfile() {
   return (
     <div className="min-h-screen">
       <div className="flex justify-between border-b-2 border-[#282e4d] mx-10 pt-28">
-        <p className="text-xl sm:text-3xl  ml-2 ">Mettre à jour mon profile</p>
+        <p className="text-xl sm:text-3xl  ml-2 ">Mettre à jour mon profil</p>
       </div>
       <section className="flex justify-center sm:mt-8 mb-8">
         <div className="text-white rounded-lg shadow-lg shadow-[#a4aac1] bg-[#4e557a] xl:w-3/6 m-8 sm:m-0  ">

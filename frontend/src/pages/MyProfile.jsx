@@ -7,7 +7,7 @@ export default function MyProfile() {
   if (!user) {
     return (
       <p className=" text-slate-500 flex justify-center mt-56 min-h-screen">
-        Chargement du profile en cours...
+        Chargement du profil en cours...
       </p>
     );
   }
@@ -46,7 +46,7 @@ export default function MyProfile() {
               className=" hover:bg-[#a6b2e4] shadow-xl shadow-[#282e4d] hover:border-2- hover:border-[#8899e4] bg-[#838caf] p-2 rounded-full text-center duration-300"
             >
               <p className="text-sm sm:px-4 sm:text-base" type="button">
-                Modifier mon profile
+                Modifier mon profil
               </p>
             </Link>
           </div>

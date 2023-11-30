@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import { useUserContext } from "../contexts/UserContext";
 import "react-toastify/dist/ReactToastify.css";
+import formatDate from "../services/formatDate";
 
 export default function DrawingDetails() {
   const navigate = useNavigate();
@@ -58,7 +59,11 @@ export default function DrawingDetails() {
           const filteredComments = data.filter(
             (comment) => comment.drawing_id === drawing.id
           );
-          setCommentList(filteredComments);
+          const commentsWithOffset = filteredComments.map((comment) => ({
+            ...comment,
+            dateTime: formatDate(comment.dateTime),
+          }));
+          setCommentList(commentsWithOffset);
         }
       })
 
@@ -138,6 +143,11 @@ export default function DrawingDetails() {
       .catch((err) => console.error(err));
   };
 
+  // Prevents context menu from appearing (right-click)
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+  };
+
   useEffect(() => {
     getUsersList();
     getOneDrawing();
@@ -166,12 +176,13 @@ export default function DrawingDetails() {
   return (
     <div className="mt-20 min-h-screen">
       <Link to="/gallery">
-        <BsIcons.BsArrowLeftCircle className="absolute mt-3  ml-3 w-7 h-7" />
+        <BsIcons.BsArrowLeftCircle className="absolute mt-2 ml-1 w-6 h-6 sm:mt-3  sm:ml-3 sm:w-7 sm:h-7" />
       </Link>
       <div className="md:grid md:grid-cols-2 mx-4 mt-7">
         <div
           key={`details-${drawing.id}`}
           className="flex flex-col items-center my-5 mx-4 "
+          onContextMenu={handleContextMenu}
         >
           <img
             src={`${import.meta.env.VITE_BACKEND_URL}/public/assets/drawings/${
@@ -203,7 +214,7 @@ export default function DrawingDetails() {
 
         <div className="flex justify-center items-center  ">
           <div className="w-full sm:w-9/12 rounded-lg shadow-xl shadow-[#a4aac1] bg-[#939cc4] p-4">
-            <p className="mb-2 ml-2 text-[#FFFFFF] font-semibold italic">
+            <p className=" text-sm sm:text-base mb-2 ml-2 text-[#FFFFFF] font-semibold italic">
               Commentaires :
             </p>
             <div className="flex flex-col justify-between rounded-md shadow-xl shadow-[#2b334f] bg-[#e1e4f6] h-96 p-4 mb-6 ">
@@ -223,11 +234,13 @@ export default function DrawingDetails() {
                           }  rounded-md mb-1 p-1 `}
                         >
                           <div className="flex flex-col">
-                            <p className=" text-base">
+                            <p className=" text-sm sm:text-base">
                               {commentUser.pseudo} :{" "}
                             </p>
                             <div className="flex flex-col">
-                              <p className=" text-base mx-1 ">{item.comment}</p>
+                              <p className=" text-sm sm:text-base mx-1 ">
+                                {item.comment}
+                              </p>
                               <p className="italic text-xs">
                                 {format(
                                   new Date(item.dateTime),
@@ -269,7 +282,7 @@ export default function DrawingDetails() {
                 value={newComment}
                 onChange={handleChangeComment}
                 placeholder="Laissez un commentaire ! "
-                className=" p-2 italic rounded-md text-sm w-full "
+                className=" p-2 italic rounded-md text-xs sm:text-sm w-full "
               />
               <button
                 type="button"
